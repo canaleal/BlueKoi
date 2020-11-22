@@ -1,0 +1,251 @@
+﻿
+html,
+body {
+    height: 100%;
+    scroll-behavior: smooth;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/*Font styles*/
+p, td {
+    font-size: 16px;
+}
+
+thead td {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+h1, h2, h3 {
+    font-weight: bold;
+}
+
+.text-lite {
+    color: #ADBDCC;
+}
+
+.royal {
+    color: #4949ff;
+}
+
+.dark {
+    background-color: #222126;
+}
+
+
+.image {
+    display: block;
+    width: 50%;
+    height: auto;
+    -webkit-transition: 300ms ease;
+    transition: 300ms ease;
+}
+
+.image-zoom:hover {
+    -webkit-transform: scale(1.01);
+    transform: scale(1.01);
+}
+
+.btn-rounded {
+    border-radius: 25px;
+}
+
+.btn-wide {
+    width: 15rem !important;
+}
+
+.form-wide {
+    width: 20rem !important;
+}
+
+@media only screen and (min-width: 1200px) {
+    .bg-br {
+        border-top-right-radius: 200px;
+        border-bottom-right-radius: 200px;
+    }
+}
+
+.align-center {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.card-sign {
+    border: 0;
+    height: 90vh;
+    width: 100%;
+    -moz-box-shadow: 0 0 10px #4949ff;
+    -webkit-box-shadow: 0 0 10px #4949ff;
+    box-shadow: 0 0 10px #4949ff;
+    overflow: hidden
+}
+
+.main-rounded {
+    border-radius: 1rem;
+}
+
+.lower-z {
+    z-index: 0;
+}
+
+.image-sign {
+    width: 100%;
+    height: 100vh;
+    -webkit-transition: 300ms ease;
+    transition: 300ms ease;
+    z-index: 1;
+}
+
+.slanted-bot {
+    -webkit-clip-path: polygon(100% 0, 100% 80%, 0 100%, 0 0);
+    clip-path: polygon(100% 0, 100% 80%, 0 100%, 0 0);
+}
+
+.slanted-both {
+    -webkit-clip-path: polygon(100% 0, 100% 80%, 0 100%, 0 20%);
+    clip-path: polygon(100% 0, 100% 80%, 0 100%, 0 20%);
+}
+
+.padder-small {
+    padding-top: 50px;
+    padding-bottom: 100px;
+}
+
+.padder-large {
+    padding-top: 200px;
+    padding-bottom: 200px;
+}
+
+.btn-purple {
+    background-color: #4949ff !important;
+    color: #fff !important;
+}
+
+
+.btn-white:hover {
+    background-color: #fff !important;
+    color: #4949ff !important;
+}
+
+.btn-black:hover {
+    background-color: #222126 !important;
+    color: #fff !important;
+}
+
+
+/*# sourceMappingURL=style.css.map */
+.rotate {
+    animation: rotation 10s infinite linear;
+}
+
+@keyframes rotation {
+    from {
+        transform: rotate(359deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+.navbar {
+    -moz-box-shadow: 0 0 10px #4949ff;
+    -webkit-box-shadow: 0 0 10px #4949ff;
+    box-shadow: 0 0 10px #4949ff;
+}
+
+    .navbar a {
+        font-weight: 600;
+        transition: 200ms linear;
+    }
+
+.navbar-nav > li {
+    padding-left: 1rem;
+}
+
+
+.brgrid {
+    display: -ms-grid;
+    display: grid;
+    gap: 1rem;
+    -ms-grid-columns: (minmax(400px, 1fr))[auto-fit];
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: 400px;
+    grid-auto-flow: dense;
+    margin-bottom: 1rem;
+}
+
+.tall {
+    grid-row: span 2;
+}
+
+.wide {
+    grid-column: span 2;
+}
+
+/* Small screens */
+@media only screen and (max-width: 600px) {
+    .tall {
+        grid-row: span 2;
+    }
+
+    .wide {
+        grid-column: span 1;
+    }
+
+    .form-wide {
+        width: 10rem !important;
+    }
+}
+
+.card {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    font-size: 3rem;
+    color: #fff;
+    height: 100%;
+    width: 100%;
+    border-radius: 1rem;
+    -webkit-transition: all 1s;
+    transition: all 1s;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+    .card:hover {
+        -webkit-box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+        box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
+        -webkit-transform: scale(1.01);
+        transform: scale(1.01);
+        cursor: pointer;
+    }
+
+.nsfw {
+    -webkit-filter: blur(8px);
+    filter: blur(8px);
+}
+
+    .nsfw:hover {
+        -webkit-filter: none;
+        filter: none;
+    }
