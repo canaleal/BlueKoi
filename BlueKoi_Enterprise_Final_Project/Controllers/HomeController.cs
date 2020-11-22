@@ -37,7 +37,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         }
 
         [HttpGet]
-        public ViewResult SignUp()
+        public ViewResult SignUpView()
         {
             return View("SignUpView");
         }
