@@ -16,8 +16,8 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
     {
         private readonly VirtualStoreDBContext _context;
         private readonly IAccountRepository accountRepository;
-        private Account currentUser;
 
+        
         public HomeController(IAccountRepository accountRepository)
         {
       
@@ -43,11 +43,11 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if (ModelState.IsValid)
             {
                 Account account = accountRepository.GetAnAccountEmailPass(loginAccount.UserEmail, loginAccount.UserPassword);
-              
-                if (account.UserEmail != null)
+                
+                if (account != null)
                 {
-                    currentUser = account;
-                    return View("Index");
+                    TempData["ID"] = account.Id;
+                    return RedirectToAction(nameof(StorePageView));
                 }
                 else
                 {
@@ -72,12 +72,35 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if (ModelState.IsValid)
             {
                 accountRepository.Add(newAccount);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(StorePageView));
             }
             return View("SignUpView");
         }
 
 
+        [HttpGet]
+        public ActionResult StorePageView()
+        {
+            int id = int.Parse(TempData["ID"].ToString());
+            return View(accountRepository.GetAnAccount(id));
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult StorePageView(Account newAccount)
+        {
+            if (ModelState.IsValid)
+            {
+                accountRepository.Add(newAccount);
+                return RedirectToAction(nameof(Index));
+            }
+            return View("SignUpView");
+        }
+
+        [HttpGet]
+        public ActionResult AccountView(int id)
+        {
+            return View(accountRepository.GetAnAccount(id));
+        }
     }
 }

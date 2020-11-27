@@ -1,0 +1,42 @@
+﻿@model BlueKoi_Enterprise_Final_Project.Models.Account
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Account";
+}
+
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-lg-12  align-center dark">
+            <div class="card-sign main-rounded col-lg-8 align-center bg-light text-center">
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <img class="image-sign"
+                             src="https://i.pinimg.com/564x/e7/1e/46/e71e4645af4048553fdf6a5e3af72e60.jpg" alt="art">
+                    </div>
+                    <div class="col-lg-6 my-auto">
+                        <h3 class="my-3">Account Details</h3>
+
+                        <h5>@Model.UserName</h5>
+                        <h5>@Model.UserEmail</h5>
+                        <a href="login.html" class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">Edit Account</a>
+                        <hr>
+
+                        <a href="login.html" class="btn btn-black btn-secondary btn-rounded btn-lg btn-block text-uppercase my-3">Edit Card</a>
+                        <hr class="my-3 d-none d-lg-block">
+                        <a href="login.html">
+                            Delete Account Menu <i class="fa fa-long-arrow-right m-l-5"
+                                                   aria-hidden="true"></i>
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
