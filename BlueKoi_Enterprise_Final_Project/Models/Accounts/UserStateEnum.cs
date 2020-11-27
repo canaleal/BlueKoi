@@ -7,8 +7,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models
 {
     public enum UserStateEnum
     {
-        New,
-        Active,
-        Banned
+        New = 0,
+        Active = 1,
+        Banned = 2
     }
 }

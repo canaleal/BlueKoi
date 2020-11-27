@@ -1,4 +1,5 @@
 ﻿using BlueKoi_Enterprise_Final_Project.Models.Items;
+using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Data
 
         }
 
+        public DbSet<Account> Accounts { get; set; }
         public DbSet<Item> Items { get; set; }
+        
     }
 }

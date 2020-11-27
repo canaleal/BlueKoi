@@ -1,94 +1,84 @@
-﻿@{
-    Layout = null;
+﻿@model BlueKoi_Enterprise_Final_Project.Models.Account
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Login";
 }
-<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Thanks</title>
-    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet">
-    <script src="https://kit.fontawesome.com/ed2dadc4ab.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-</head>
-<body>
 
-    <div class="container-fluid h-100">
-        <div class="row h-100">
-            <div class="col-lg-12  align-center dark">
-                <div class="card-sign main-rounded col-lg-8 align-center bg-light text-center">
-                    <div class="row">
-                        <div class="col-lg-6 d-none d-lg-block">
-                            <img class="image-sign"
-                                 src="https://i.pinimg.com/564x/34/b2/bd/34b2bd87fd53933b8945c508fc7ea34a.jpg" alt="art">
-                        </div>
-                        <div class="col-lg-6 my-auto">
-                            <h3 class="my-3">Sign Up</h3>
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-lg-12  align-center dark">
+            <div class="card-sign main-rounded col-lg-8 align-center bg-light text-center">
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <img class="image-sign"
+                             src="https://i.pinimg.com/564x/34/b2/bd/34b2bd87fd53933b8945c508fc7ea34a.jpg" alt="art">
+                    </div>
+                    <div class="col-lg-6 my-auto">
+                        <h3 class="my-3">Sign Up</h3>
 
-                            <form class="needs-validation" novalidate>
-
-                                <div class="input-group my-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fa fa-user"
-                                               aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                    <input type="text" id="inputName" class="form-control" placeholder="Name"
-                                           required autofocus>
+                        <form asp-action="SignUpView" class="needs-validation" novalidate>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-user"
+                                           aria-hidden="true"></i>
+                                    </span>
                                 </div>
+                                <input asp-for="UserName" type="text" id="inputName" class="form-control" placeholder="Name"
+                                       required autofocus>
 
-                                <div class="input-group my-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fa fa-envelope"
-                                               aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                    <input type="email" id="inputEmail" class="form-control" placeholder="Email"
-                                           required autofocus>
+                            </div>
+                            <span asp-validation-for="UserEmail" class="text-danger"></span>
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-envelope"
+                                           aria-hidden="true"></i>
+                                    </span>
                                 </div>
+                                <input asp-for="UserEmail" type="email" id="inputEmail" class="form-control" placeholder="Email"
+                                       required autofocus>
 
-                                <div class="input-group my-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text">
-                                            <i class="fa fa-lock"
-                                               aria-hidden="true"></i>
-                                        </span>
-                                    </div>
-                                    <input type="password" id="inputPassword" class="form-control"
-                                           placeholder="Password" required>
+                            </div>
+                            <span asp-validation-for="UserPassword" class="text-danger"></span>
+                            <div class="input-group my-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">
+                                        <i class="fa fa-lock"
+                                           aria-hidden="true"></i>
+                                    </span>
                                 </div>
+                                <input asp-for="UserPassword" type="password" id="inputPassword" class="form-control"
+                                       placeholder="Password" required>
 
-                                <button id="submit-btn"
-                                        class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">
-                                    Register
-                                </button>
+                            </div>
 
-                            </form>
-                            <hr class="my-3 d-none d-lg-block">
-                            <a asp-action="SignUpView">
-                                Login <i class="fa fa-long-arrow-right m-l-5"
-                                         aria-hidden="true"></i>
-                            </a>
+                            <button  type="submit" value="Create" id="submit-btn"
+                                    class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">
+                                Register
+                            </button>
 
-                        </div>
+                        </form>
+                        <hr class="my-3 d-none d-lg-block">
+                        <a asp-action="SignUpView">
+                            Login <i class="fa fa-long-arrow-right m-l-5"
+                                     aria-hidden="true"></i>
+                        </a>
 
                     </div>
 
-
                 </div>
+
+
             </div>
-
         </div>
+
     </div>
+</div>
 
 
-
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-            crossorigin="anonymous"></script>
-
-</body>
-</html>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

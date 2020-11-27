@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using BlueKoi_Enterprise_Final_Project.Models.Data;
 using BlueKoi_Enterprise_Final_Project.Models.Items;
 using Microsoft.AspNetCore.Builder;
@@ -27,8 +28,9 @@ namespace BlueKoi_Enterprise_Final_Project
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<VirtualStoreDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
-
+            services.AddScoped<IAccountRepository, AccountOperations>();
             services.AddScoped<IItemRepository, ItemOperations>();
+            
             services.AddControllersWithViews();
         }
 

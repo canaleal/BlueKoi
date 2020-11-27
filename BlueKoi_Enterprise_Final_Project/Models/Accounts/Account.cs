@@ -11,17 +11,24 @@ namespace BlueKoi_Enterprise_Final_Project.Models
     public class Account
     {
         [Key]
-        private string Id { get; set; }
+        public int Id { get; set; }
 
-        [Column("UserName")]
-        [Required(ErrorMessage = "Account username is required.")]
-        private string UserName { get; set; }
+        [Column("Name")]
+        public string UserName { get; set; }
 
-        [Column("UserName")]
-        [Required(ErrorMessage = "Account username is required.")]
-        private string UserEmail { get; set; }
-        private string UserPassword { get; set; }
+        [Column("Email")]
+        [Required(ErrorMessage = "Account email is required.")]
+        public string UserEmail { get; set; }
+
+        [Column("Password")]
+        [Required(ErrorMessage = "Account password is required.")]
+        public string UserPassword { get; set; }
+
+        [Column("IsClosed")]
         public bool IsClosed { get; set; }
+
+        [Column("UserState")]
         public UserStateEnum UserState { get; set; }
+
     }
 }
