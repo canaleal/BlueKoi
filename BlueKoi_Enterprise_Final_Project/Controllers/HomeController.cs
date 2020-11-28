@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using BlueKoi_Enterprise_Final_Project.Models;
 using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using BlueKoi_Enterprise_Final_Project.Models.Data;
+using BlueKoi_Enterprise_Final_Project.Models.Items;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
@@ -16,12 +17,16 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
     {
         private readonly VirtualStoreDBContext _context;
         private readonly IAccountRepository accountRepository;
+        private readonly IItemRepository itemRepository;
 
         
-        public HomeController(IAccountRepository accountRepository)
+
+
+        public HomeController(IAccountRepository accountRepository, IItemRepository itemRepository)
         {
       
             this.accountRepository = accountRepository;
+            this.itemRepository = itemRepository;
         }
 
         [HttpGet]
@@ -33,7 +38,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         [HttpGet]
         public ActionResult LoginView()
         {
-            return View("LoginView");
+            return View();
         }
 
         [HttpPost]
@@ -51,17 +56,17 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 }
                 else
                 {
-                    return View("LoginView");
+                    return View();
                 }
                
             }
-            return View("LoginView");
+            return View();
         }
 
         [HttpGet]
         public ActionResult SignUpView()
         {
-            return View("SignUpView");
+            return View();
         }
 
 
@@ -72,17 +77,25 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if (ModelState.IsValid)
             {
                 accountRepository.Add(newAccount);
+                TempData["ID"] = newAccount.Id;
                 return RedirectToAction(nameof(StorePageView));
             }
-            return View("SignUpView");
+            return View();
         }
 
 
         [HttpGet]
         public ActionResult StorePageView()
         {
+            MyViewModel model = new MyViewModel();
             int id = int.Parse(TempData["ID"].ToString());
-            return View(accountRepository.GetAnAccount(id));
+
+            model.account = accountRepository.GetAnAccount(id);
+            model.items = itemRepository.GetItems();
+
+            //return View(accountRepository.GetAnAccount(id));
+
+            return View(model);
         }
 
         [HttpPost]
@@ -94,7 +107,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 accountRepository.Add(newAccount);
                 return RedirectToAction(nameof(Index));
             }
-            return View("SignUpView");
+            return View();
         }
 
         [HttpGet]

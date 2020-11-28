@@ -1,4 +1,5 @@
-﻿@model BlueKoi_Enterprise_Final_Project.Models.Account
+﻿
+@model BlueKoi_Enterprise_Final_Project.Models.MyViewModel
 
 @{
     Layout = "_Layout";
@@ -21,19 +22,19 @@
             <ul class="navbar-nav w-100">
 
 
-                <form  class="form-inline my-2 mx-lg-auto">
+                <form class="form-inline my-2 mx-lg-auto">
                     <input id="inputSearch" class="form-control mr-sm-2 form-wide" type="search" placeholder="Search" aria-label="Search">
                     <button id="search-btn" class="btn btn-white btn-purple my-2  my-sm-0" type="submit">Search</button>
                 </form>
 
                 <li>
-                    <a class="nav-link active" asp-action="AccountView" asp-route-id="@Model.Id">Account</a>
+                    <a class="nav-link active" asp-action="AccountView"  asp-route-id="@Model.account.Id">Account</a>
                 </li>
                 <li>
-                    <a class="nav-link active" asp-action="OrderView" asp-route-id="@Model.Id">Orders</a>
+                    <a class="nav-link active" asp-action="OrderView" asp-route-id="@Model.account.Id">Orders</a>
                 </li>
                 <li>
-                    <a class="nav-link active" asp-action="CartView" asp-route-id="@Model.Id"><i class="fas fa-shopping-cart"></i> Cart</a>
+                    <a class="nav-link active" asp-action="CartView" asp-route-id="@Model.account.Id"><i class="fas fa-shopping-cart"></i> Cart</a>
                 </li>
 
             </ul>
@@ -52,5 +53,18 @@
 </div>
 
 <main>
+
+    <div class="container py-2">
+        <h5>Set : Developer Favorites</h5>
+        <div class="brgrid">
+            @foreach (var item in Model.items)
+            {
+                <div class="card " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="20" src="~/images/BlueKoi.png" alt=""></div>
+            }
+
+        </div>
+    </div>
+
+    
 
 </main>
