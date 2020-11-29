@@ -10,6 +10,9 @@ using BlueKoi_Enterprise_Final_Project.Models;
 using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using BlueKoi_Enterprise_Final_Project.Models.Data;
 using BlueKoi_Enterprise_Final_Project.Models.Items;
+using System.Net;
+using System.IO;
+using Newtonsoft.Json.Linq;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
@@ -18,8 +21,6 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         private readonly VirtualStoreDBContext _context;
         private readonly IAccountRepository accountRepository;
         private readonly IItemRepository itemRepository;
-
-        
 
 
         public HomeController(IAccountRepository accountRepository, IItemRepository itemRepository)
@@ -52,13 +53,10 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 if (account != null)
                 {
                     TempData["ID"] = account.Id;
+                   
                     return RedirectToAction(nameof(StorePageView));
                 }
-                else
-                {
-                    return View();
-                }
-               
+  
             }
             return View();
         }
@@ -85,35 +83,75 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
 
         [HttpGet]
-        public ActionResult StorePageView()
+        public ActionResult StorePageView(int accountId)
         {
-            MyViewModel model = new MyViewModel();
-            int id = int.Parse(TempData["ID"].ToString());
+            int id;
 
-            model.account = accountRepository.GetAnAccount(id);
-            model.items = itemRepository.GetItems();
-
-            //return View(accountRepository.GetAnAccount(id));
-
-            return View(model);
+            if (TempData["ID"] != null)
+            {
+                id = int.Parse(TempData["ID"].ToString());
+            }
+            else
+            {
+                id = accountId;
+            }
+                      
+            ViewBag.images = itemRepository.GetItems();
+            return View(accountRepository.GetAnAccount(id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult StorePageView(Account newAccount)
+        public ActionResult StorePageView(string accountId, string search)
         {
-            if (ModelState.IsValid)
+           
+            ViewBag.images = itemRepository.GetItems();
+
+            string url = "https://api.unsplash.com/search/photos/?client_id=" + "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY" + "&per_page=20&query=" + search;
+            HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
+            myReq.ContentType = "application/json";
+            HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();
+            
+            string text;
+            using (var sr = new StreamReader(response.GetResponseStream()))
             {
-                accountRepository.Add(newAccount);
-                return RedirectToAction(nameof(Index));
+                text = sr.ReadToEnd();
             }
-            return View();
+
+            JObject json = JObject.Parse(text);
+            ViewBag.pinterest = search;
+            ViewBag.pinterestData = json["results"];
+            
+
+            return View(accountRepository.GetAnAccount(int.Parse(accountId)));
         }
 
         [HttpGet]
         public ActionResult AccountView(int id)
         {
+            TempData["ID"] = id;
             return View(accountRepository.GetAnAccount(id));
         }
+
+
+        [HttpGet]
+        public ActionResult ItemView(int id, string url)
+        {
+            TempData["ID"] = id;
+            ViewBag.url = url;
+            return View(accountRepository.GetAnAccount(id));
+        }
+
+
+        [HttpGet]
+        public ActionResult CreditCardView(int id, string url)
+        {
+            TempData["ID"] = id;
+            ViewBag.id = id;
+            ViewBag.url = url;
+            return View();
+        }
+
+
     }
 }

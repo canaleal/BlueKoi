@@ -1,5 +1,5 @@
 ﻿
-@model BlueKoi_Enterprise_Final_Project.Models.MyViewModel
+@model BlueKoi_Enterprise_Final_Project.Models.Account
 
 @{
     Layout = "_Layout";
@@ -22,19 +22,20 @@
             <ul class="navbar-nav w-100">
 
 
-                <form class="form-inline my-2 mx-lg-auto">
-                    <input id="inputSearch" class="form-control mr-sm-2 form-wide" type="search" placeholder="Search" aria-label="Search">
+                <form asp-action="StorePageView" method="post" class="form-inline my-2 mx-lg-auto">
+                    <input type="hidden" name="accountId" value="@Model.Id" />
+                    <input name="search" class="form-control mr-sm-2 form-wide" type="search" placeholder="Search" aria-label="Search">
                     <button id="search-btn" class="btn btn-white btn-purple my-2  my-sm-0" type="submit">Search</button>
                 </form>
 
                 <li>
-                    <a class="nav-link active" asp-action="AccountView"  asp-route-id="@Model.account.Id">Account</a>
+                    <a class="nav-link active" asp-action="AccountView" asp-route-id="@Model.Id">Account</a>
                 </li>
                 <li>
-                    <a class="nav-link active" asp-action="OrderView" asp-route-id="@Model.account.Id">Orders</a>
+                    <a class="nav-link active" asp-action="OrderView" asp-route-id="@Model.Id">Orders</a>
                 </li>
                 <li>
-                    <a class="nav-link active" asp-action="CartView" asp-route-id="@Model.account.Id"><i class="fas fa-shopping-cart"></i> Cart</a>
+                    <a class="nav-link active" asp-action="CartView" asp-route-id="@Model.Id"><i class="fas fa-shopping-cart"></i> Cart</a>
                 </li>
 
             </ul>
@@ -46,6 +47,8 @@
     <div class="container">
         <div class="row justify-content-between">
             <img class="mx-2" height="30" src="~/images/ArtStation.png" alt="">
+
+
             <img class="mx-2" height="30" src="~/images/Pinterest.png" alt="">
             <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt="">
         </div>
@@ -54,17 +57,36 @@
 
 <main>
 
-    <div class="container py-2">
-        <h5>Set : Developer Favorites</h5>
-        <div class="brgrid">
-            @foreach (var item in Model.items)
-            {
-                <div class="card " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="20" src="~/images/BlueKoi.png" alt=""></div>
-            }
+    @if (ViewBag.pinterestData != null)
+    {
+        <div class="container py-2">
+            <h5>Set : @ViewBag.pinterest</h5>
+            <div class="brgrid">
+                @foreach (var data in ViewBag.pinterestData)
+                {
+                    <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@data["urls"]["regular"]">
+                        <div class="card " style="background-image:url(@data["urls"]["regular"])"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
 
+                    </a>     
+                }
+
+            </div>
         </div>
-    </div>
+    }
+    else
+    {
+        <div class="container py-2">
+            <h5>Set : Developer Favorites</h5>
+            <div class="brgrid">
+                @foreach (var item in ViewBag.images)
+                {
+                    <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@item.ItemURL">
+                        <div class="card " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
+                    </a>
+                 }
 
-    
+            </div>
+        </div>
+    }
 
 </main>

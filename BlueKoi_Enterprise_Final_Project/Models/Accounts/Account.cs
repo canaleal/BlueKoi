@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BlueKoi_Enterprise_Final_Project.Models.Orders;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -29,6 +30,11 @@ namespace BlueKoi_Enterprise_Final_Project.Models
 
         [Column("UserState")]
         public UserStateEnum UserState { get; set; }
+
+        [Column("RecentSearch")]
+        public string RecentSearch { get; set; }
+
+
 
     }
 }

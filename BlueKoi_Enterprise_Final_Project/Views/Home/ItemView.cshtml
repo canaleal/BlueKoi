@@ -1,0 +1,46 @@
+﻿@model BlueKoi_Enterprise_Final_Project.Models.Account
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "ItemView";
+}
+
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-lg-12  align-center dark">
+            <div class="card-sign main-rounded col-lg-8 align-center bg-light text-center">
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <img  class="image-sign-small"
+                             src="@ViewBag.url" alt="art">
+                    </div>
+                    <div class="col-lg-6 my-auto">
+                        <h3 class="my-3">KOI Art</h3>
+
+                        <p>Purchase the item from the download Store!</p>
+
+                        <a asp-action="CreditCardView" asp-route-id="@Model.Id" asp-route-url="@ViewBag.url" id="submit-btn"
+                           class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">
+                            Buy
+                        </a>
+
+
+                        <hr class="my-3 d-none d-lg-block">
+                        <a asp-action="StorePageView" asp-route-accountId="@Model.Id">
+                            <i class="fa fa-long-arrow-left m-r-5"
+                               aria-hidden="true"></i> Go Back
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
