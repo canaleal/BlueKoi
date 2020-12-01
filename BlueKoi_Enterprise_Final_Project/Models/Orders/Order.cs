@@ -13,8 +13,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         [Key]
         public int Id { get; set; }
 
-        [Column("AccountId")]
-        public int AccountId { get; set; }
+        [Column("OrderCartId")]
+        public int OrderCartId { get; set; }
 
         [Column("URL")]
         public string ItemURL { get; set; }

@@ -34,7 +34,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models
         [Column("RecentSearch")]
         public string RecentSearch { get; set; }
 
-
+        
+        public OrdersCart OrderCartList { get; set; }
 
     }
 }

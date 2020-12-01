@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using BlueKoi_Enterprise_Final_Project.Models.Data;
 using BlueKoi_Enterprise_Final_Project.Models.Items;
+using BlueKoi_Enterprise_Final_Project.Models.Orders;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -31,6 +32,7 @@ namespace BlueKoi_Enterprise_Final_Project
 
             services.AddDbContext<VirtualStoreDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
             services.AddScoped<IAccountRepository, AccountOperations>();
+            services.AddScoped<IOrdersCartRepository, OrdersCartOperations>();
             services.AddScoped<IItemRepository, ItemOperations>();
             
             services.AddControllersWithViews();

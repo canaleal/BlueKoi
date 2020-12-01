@@ -13,7 +13,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Items
         [Key]
         public int Id { get; set; }
 
-        [Column("AccountID")]
+        [Column("AccountId")]
         [Required(ErrorMessage = "Seller Id is required.")]
         public int AccountId { get; set; }
 
