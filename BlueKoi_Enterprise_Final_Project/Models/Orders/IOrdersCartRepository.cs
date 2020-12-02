@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BlueKoi_Enterprise_Final_Project.Models.Orders
 {
-    interface IOrdersCartRepository
+    public interface IOrdersCartRepository
     {
 
         OrdersCart GetAnOrdersCart(int accountId);

@@ -18,13 +18,14 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
         public int ExpireDate { get; set; }
 
         [Required(ErrorMessage = "CV is required.")]
+        [Range(99, 1000, ErrorMessage = "CV must have 3 characters.")]
         public int CVNumber { get; set; }
 
         [Required(ErrorMessage = "No user is logged in.")]
         public int AccountId { get; set; }
 
-        [Required(ErrorMessage = "Seller Id is required.")]
-        public int SellerId { get; set; }
+        [Required(ErrorMessage = "No image is selected.")]
+        public string ItemURL { get; set; }
 
         public bool IsSaleValid { get; set; } = false;
 

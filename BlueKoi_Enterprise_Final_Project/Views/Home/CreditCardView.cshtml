@@ -17,13 +17,14 @@
                         <i class="fab fa-cc-paypal fa-3x mx-2"></i>
                         <i class="fab fa-cc-discover fa-3x mx-2"></i>
                     </div>
-                    <form class="needs-validation" novalidate>
-
+                    <form asp-action="CreditCardView" class="needs-validation" novalidate>
+                        <input type="hidden" asp-for="AccountId" value="@ViewBag.id" />
+                         <input type="hidden" asp-for="ItemURL" value="@ViewBag.url" />
                         <div class="input-group my-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user" aria-hidden="true"></i></span>
                             </div>
-                            <input type="text" id="inputName" class="form-control" placeholder="Card Holder"
+                            <input asp-for="CardHolder" type="text" class="form-control" placeholder="Card Holder"
                                    required autofocus>
                         </div>
 
@@ -31,7 +32,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
                             </div>
-                            <input type="password" id="inputAccess" class="form-control" placeholder="Card Number"
+                            <input asp-for="CardNumber" type="text" id="inputAccess" class="form-control" placeholder="Card Number"
                                    required>
                         </div>
 
@@ -43,7 +44,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
                                     </div>
-                                    <input type="text" id="inputExp" class="form-control" placeholder="MM/YY"
+                                    <input asp-for="ExpireDate" type="text" id="inputExp" class="form-control" placeholder="MM/YY"
                                            required>
                                 </div>
 
@@ -55,16 +56,16 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-credit-card"></i></span>
                                     </div>
-                                    <input type="text" id="inputSecurity" class="form-control" placeholder="###"
+                                    <input asp-for="CVNumber" type="text" id="inputSecurity" class="form-control" placeholder="###"
                                            required>
                                 </div>
 
                             </div>
                         </div>
 
-                        <button id="submit-btn"
+                        <button type="submit"
                                 class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">
-                            Buy Art
+                            Confirm Card
                         </button>
 
                     </form>

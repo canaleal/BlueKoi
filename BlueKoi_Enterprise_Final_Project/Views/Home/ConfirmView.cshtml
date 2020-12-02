@@ -1,0 +1,78 @@
+﻿@model BlueKoi_Enterprise_Final_Project.Models.Orders.Order
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Confirm";
+}
+
+
+
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-lg-12  align-center dark">
+            <div class="card-sign main-rounded col-lg-8 bg-light ">
+
+                <form asp-action="ConfirmView" class="needs-validation" novalidate>
+                    <input type="hidden" asp-for="OrderCartId" value="1" />
+                    <input type="hidden" asp-for="ItemURL" value="@ViewBag.url" />
+                    <input type="hidden" asp-for="OrderState" value="0" />
+
+                    <input type="hidden" name="accountId" value="@ViewBag.id" />
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <h3 class="my-3">Order Details</h3>
+                            <p>Order #</p>
+
+                            <p>Ships To:</p>
+                            <p>Online Download</p>
+                        </div>
+                        <div class="col-lg-4">
+                            <img class="my-3" height="200"
+                                 src="@ViewBag.url" alt="art">
+                        </div>
+                    </div>
+
+
+
+                    <table class="table table-bordered">
+
+                        <tbody>
+                            <tr>
+                                <th scope="row">Total Before Tax</th>
+                                <td>$FREE</td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Total Before Tax</th>
+                                <td>$FREE</td>
+
+                            </tr>
+                            <tr>
+                                <th scope="row">Estimated Tax</th>
+                                <td>$FREE</td>
+
+                            </tr>
+                            <tr class="bg-secondary text-white">
+                                <th scope="row">Order Total</th>
+                                <td>$FREE</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <button type="submit" class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">Confrim Order</button>
+
+                </form>
+
+                <hr class="my-3 d-none d-lg-block">
+                <a asp-action="StorePageView" asp-route-id="@ViewBag.id">
+                    <i class="fa fa-long-arrow-left m-r-5"
+                       aria-hidden="true"></i> Cancel Order
+                </a>
+
+            </div>
+        </div>
+    </div>
+</div>

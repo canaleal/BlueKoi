@@ -37,5 +37,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models
         
         public OrdersCart OrderCartList { get; set; }
 
+
+
     }
 }

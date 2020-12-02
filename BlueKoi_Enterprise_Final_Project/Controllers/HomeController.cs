@@ -13,6 +13,9 @@ using BlueKoi_Enterprise_Final_Project.Models.Items;
 using System.Net;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using BlueKoi_Enterprise_Final_Project.Models.Payment;
+using BlueKoi_Enterprise_Final_Project.Models.Orders;
+using Newtonsoft.Json;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
@@ -21,13 +24,14 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         private readonly VirtualStoreDBContext _context;
         private readonly IAccountRepository accountRepository;
         private readonly IItemRepository itemRepository;
+        private readonly IOrdersCartRepository ordersCartRepository;
 
-
-        public HomeController(IAccountRepository accountRepository, IItemRepository itemRepository)
+        public HomeController(IAccountRepository accountRepository, IItemRepository itemRepository, IOrdersCartRepository ordersCartRepository)
         {
       
             this.accountRepository = accountRepository;
             this.itemRepository = itemRepository;
+            this.ordersCartRepository = ordersCartRepository;
         }
 
         [HttpGet]
@@ -151,6 +155,56 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             ViewBag.url = url;
             return View();
         }
+
+
+        [HttpPost]
+        public ActionResult CreditCardView(Card card)
+        {
+
+            if (ModelState.IsValid)
+            {
+                TempData["Card"] = JsonConvert.SerializeObject(card, Formatting.Indented);              
+
+                return RedirectToAction(nameof(ConfirmView));
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ConfirmView()
+        {
+            if(TempData["Card"] != null)
+            {
+                Card card = JsonConvert.DeserializeObject<Card>(TempData["Card"].ToString());
+
+                //Get the cart using the ID
+                //Do service worker check here
+
+
+                ViewBag.url = card.ItemURL;
+                ViewBag.id = card.AccountId;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction(nameof(StorePageView));
+            }
+          
+        }
+
+        [HttpPost]
+        public ActionResult ConfirmView(Order order, string accountId)
+        {
+            if (ModelState.IsValid)
+            {
+                ordersCartRepository.AddOrder(order);
+                TempData["ID"] = int.Parse(accountId);
+                return RedirectToAction(nameof(StorePageView));
+            }          
+            return View();
+        }
+
+   
 
 
     }
