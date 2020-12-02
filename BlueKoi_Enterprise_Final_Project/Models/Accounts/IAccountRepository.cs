@@ -18,5 +18,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Accounts
         void Update(Account accountChange);
 
         void Delete(Account account);
+
+        bool CheckAccount(Account accountCheck);
     }
 }

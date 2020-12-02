@@ -26,10 +26,20 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
             context.SaveChanges();
         }
 
+        public void Delete(int accountId)
+        {
+            context.OrdersCarts.Remove(context.OrdersCarts.Single(a => a.AccountId == accountId));
+            context.SaveChanges();
+        }
+
         public IEnumerable<Order> GetOrders(int orderCartId)
         {
-            var orders = context.Orders.Where(a => a.OrderCartId == orderCartId);
-            return orders;
+            var data = from st in context.Orders
+                   where st.OrderCartId == orderCartId
+                   select st;
+
+            return data;
+
         }
 
         public void AddOrder(Order order)

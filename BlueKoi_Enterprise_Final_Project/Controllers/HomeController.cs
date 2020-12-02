@@ -19,6 +19,9 @@ using Newtonsoft.Json;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
+   
+
+
     public class HomeController : Controller
     {
         private readonly VirtualStoreDBContext _context;
@@ -78,9 +81,19 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                accountRepository.Add(newAccount);
-                TempData["ID"] = newAccount.Id;
-                return RedirectToAction(nameof(StorePageView));
+                bool accountExist = accountRepository.CheckAccount(newAccount);
+                if (!accountExist)
+                {
+                    accountRepository.Add(newAccount);
+                    TempData["ID"] = newAccount.Id;
+
+                    OrdersCart ordersCart = new OrdersCart();
+                    ordersCart.AccountId = newAccount.Id;
+                    ordersCartRepository.Add(ordersCart);
+
+                    return RedirectToAction(nameof(StorePageView));
+                }
+               
             }
             return View();
         }
@@ -99,36 +112,35 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             {
                 id = accountId;
             }
-                      
-            ViewBag.images = itemRepository.GetItems();
+            TempData["ID"] = id;
+
+            if (TempData["Search"] != null)
+            {
+                string text = 
+
+                JObject json = JObject.Parse(text);
+                ViewBag.pinterest = search;
+                ViewBag.pinterestData = json["results"];
+               
+            }
+            else
+            {
+                ViewBag.images = itemRepository.GetItems();
+            }
+
             return View(accountRepository.GetAnAccount(id));
         }
 
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult StorePageView(string accountId, string search)
+        public ActionResult StorePageView(string id, string search)
         {
-           
-            ViewBag.images = itemRepository.GetItems();
-
-            string url = "https://api.unsplash.com/search/photos/?client_id=" + "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY" + "&per_page=20&query=" + search;
-            HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
-            myReq.ContentType = "application/json";
-            HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();
-            
-            string text;
-            using (var sr = new StreamReader(response.GetResponseStream()))
-            {
-                text = sr.ReadToEnd();
-            }
-
-            JObject json = JObject.Parse(text);
-            ViewBag.pinterest = search;
-            ViewBag.pinterestData = json["results"];
-            
-
-            return View(accountRepository.GetAnAccount(int.Parse(accountId)));
+            TempData["ID"] = id;
+            TempData["Search"] = search;
+            return RedirectToAction(nameof(StorePageView));
         }
+
 
         [HttpGet]
         public ActionResult AccountView(int id)
@@ -137,6 +149,23 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             return View(accountRepository.GetAnAccount(id));
         }
 
+        [HttpGet]
+        public ActionResult DeleteView(int id)
+        {
+            TempData["ID"] = id;
+            return View(accountRepository.GetAnAccount(id));
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteView(Account deleteAccount)
+        {
+            ordersCartRepository.Delete(deleteAccount.Id);
+            accountRepository.Delete(deleteAccount);
+            return RedirectToAction(nameof(Index));
+
+        }
 
         [HttpGet]
         public ActionResult ItemView(int id, string url)
@@ -204,7 +233,19 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             return View();
         }
 
-   
+
+        [HttpGet]
+        public ActionResult OrderCartView(int id)
+        {
+            TempData["ID"] = id;
+
+    
+            OrdersCart ordersCart = ordersCartRepository.GetAnOrdersCart(id);
+            ViewBag.id = id;
+            IEnumerable<Order> data = ordersCartRepository.GetOrders(ordersCart.Id);
+            return View(data);
+        }
+
 
 
     }

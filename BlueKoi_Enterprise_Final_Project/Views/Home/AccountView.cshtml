@@ -22,11 +22,9 @@
 
                         <h5>@Model.UserName</h5>
                         <h5>@Model.UserEmail</h5>
-                        <a href="login.html" class="btn btn-black btn-purple btn-rounded btn-lg btn-block text-uppercase my-3">Edit Account</a>
-
 
                         <hr class="my-3 d-none d-lg-block">
-                        <a asp-action="SignUpView" asp-route-id="@Model.Id">
+                        <a asp-action="DeleteView" asp-route-id="@Model.Id">
                             Delete Account Menu <i class="fa fa-long-arrow-right m-l-5"
                                                    aria-hidden="true"></i>
                         </a>

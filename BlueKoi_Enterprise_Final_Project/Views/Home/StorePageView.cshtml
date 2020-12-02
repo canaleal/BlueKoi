@@ -10,7 +10,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark dark py-3">
     <div class="container">
-        <a class="navbar-brand" href="#">
+        <a asp-action="StorePageView" asp-route-accountId="@Model.Id" class="navbar-brand" >
             <img src="~/images/BlueKoi.png" width="30" height="30" class="d-inline-block align-top mr-2 rotate" alt="">
             <span>Blue Koi</span>
         </a>
@@ -23,7 +23,7 @@
 
 
                 <form asp-action="StorePageView" method="post" class="form-inline my-2 mx-lg-auto">
-                    <input type="hidden" name="accountId" value="@Model.Id" />
+                    <input type="hidden" name="id" value="@Model.Id" />
                     <input name="search" class="form-control mr-sm-2 form-wide" type="search" placeholder="Search" aria-label="Search">
                     <button id="search-btn" class="btn btn-white btn-purple my-2  my-sm-0" type="submit">Search</button>
                 </form>
@@ -32,12 +32,9 @@
                     <a class="nav-link active" asp-action="AccountView" asp-route-id="@Model.Id">Account</a>
                 </li>
                 <li>
-                    <a class="nav-link active" asp-action="OrderView" asp-route-id="@Model.Id">Orders</a>
+                    <a class="nav-link active" asp-action="OrderCartView" asp-route-id="@Model.Id">Orders</a>
                 </li>
-                <li>
-                    <a class="nav-link active" asp-action="CartView" asp-route-id="@Model.Id"><i class="fas fa-shopping-cart"></i> Cart</a>
-                </li>
-
+               
             </ul>
         </div>
     </div>
@@ -47,8 +44,6 @@
     <div class="container">
         <div class="row justify-content-between">
             <img class="mx-2" height="30" src="~/images/ArtStation.png" alt="">
-
-
             <img class="mx-2" height="30" src="~/images/Pinterest.png" alt="">
             <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt="">
         </div>

@@ -17,21 +17,6 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         [Column("AccountID")]
         public int AccountId { get; set; }
 
-        private List<Order> OrdersList;
-
-        public OrdersCart()
-        {
-            OrdersList = new List<Order>();
-        }
-
-        public void AddOrder()
-        {
-
-        }
-
-        public void DeleteOrder()
-        {
-
-        }
+       
     }
 }

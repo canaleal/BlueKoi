@@ -87,6 +87,18 @@ h1, h2, h3 {
     overflow: hidden
 }
 
+.border-rounded {
+    -moz-box-shadow: 0 0 10px #4949ff;
+    -webkit-box-shadow: 0 0 10px #4949ff;
+    box-shadow: 0 0 10px #4949ff;
+    border-radius: 25px;
+}
+
+.border-rounded-tp {
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
 .main-rounded {
     border-radius: 1rem;
 }

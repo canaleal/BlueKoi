@@ -53,5 +53,20 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Accounts
             context.SaveChanges();
         }
 
+        public bool CheckAccount(Account accountCheck)
+        {
+
+            Account account = context.Accounts.Where(a => a.UserEmail.Equals(accountCheck.UserEmail) && a.UserPassword.Equals(accountCheck.UserPassword)).FirstOrDefault();
+            if(account != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
     }
 }

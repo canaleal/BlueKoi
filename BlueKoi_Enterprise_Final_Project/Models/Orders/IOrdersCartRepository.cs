@@ -12,7 +12,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
 
         void Add(OrdersCart ordersCart);
 
-
+        void Delete(int accountId);
+        
         IEnumerable<Order> GetOrders(int orderCartId);
 
         void AddOrder(Order order);

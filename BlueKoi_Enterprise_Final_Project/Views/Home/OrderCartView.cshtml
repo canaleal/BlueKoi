@@ -1,0 +1,56 @@
+﻿@model IEnumerable<BlueKoi_Enterprise_Final_Project.Models.Orders.Order>
+
+@{
+    ViewData["Title"] = "OrderCartView";
+}
+
+
+
+
+<div class="container my-5">
+    <div class="row ">
+        <div class="col-lg-12">
+            <a asp-action="StorePageView" asp-route-accountId="@ViewBag.id" class="btn btn-black btn-purple btn-wide btn-rounded btn-lg py-2">
+                <i class="fa fa-long-arrow-left m-r-5" aria-hidden="true"></i> Go Back
+            </a>
+        </div>
+    </div>
+
+
+    @if (Model != null)
+    {
+        @foreach (var item in Model)
+        {
+            <div class="row my-3 border-rounded">
+                <div class="col-lg-12 bg-dark text-white text-center border-rounded-tp">
+                    <h5 class="my-auto py-2">Order# : @item.Id</h5>
+                </div>
+                <div class="col-2 py-2">
+                    <img class="image-sign-small" src="@item.ItemURL"
+                         alt="art">
+                </div>
+                <div class="col-lg-10 py-2">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <p>Order Cart ID: @item.OrderCartId</p>
+
+                            <p>Price $: @item.Price</p>
+                            <p>Shipping: Digital</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <p>No Orders Placed!</p>
+    }
+
+</div>
+
+
+
+
+

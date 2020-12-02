@@ -61,14 +61,14 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CreditCardService.svc" />
+    <Content Include="APIService.svc" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreditCardService.svc.cs">
-      <DependentUpon>CreditCardService.svc</DependentUpon>
+    <Compile Include="APIService.svc.cs">
+      <DependentUpon>APIService.svc</DependentUpon>
     </Compile>
-    <Compile Include="ICreditCardService.cs" />
+    <Compile Include="IAPIService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
