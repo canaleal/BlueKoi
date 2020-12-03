@@ -1,61 +1,8 @@
 ﻿
-const client = "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY";
-let search_btn;
-let info;
-let open_modal_btn;
-
-let modal;
 
 $("document").ready(function () {
-    search_btn = document.getElementById("search-btn");
-    search_btn.addEventListener("click", function (e) {
-        info = document.getElementById("inputSearch").value;
-
-        if (info != null) {
-            let url = "https://api.unsplash.com/search/photos/?client_id=" + client + "&per_page=20&query=" + info;
-            fetch(url)
-                .then(function (data) {
-                    return data.json();
-                })
-                .then(function (resp) {
-                    console.log(resp);
-                    let str = "";
-
-                    //resp.results.forEach(photo => {
-                    //     str += `<div class="card ${photo.height>4000? 'tall': ''} ${photo.height>6000? 'wide': ''}" style="background-image:url('${photo.urls.regular}')"></div>`
-                    // });
-
-
-                    resp.results.forEach(photo => {
-                        str += `<div class="card }" style="background-image:url('${photo.urls.regular}')"> <img class="mx-2" height="30" src="images/Pinterest.png" alt=""></div>`
-                    });
-
-
-                    let str_main = `<div class="container py-2" id="test"><h5>Set : ${info}</h5><div class="brgrid"> ${str}  </div></div>`
-
-
-                    $("main").append(str_main);
-                })
-
-            getDeviations(info, 25, 0);
-            e.preventDefault();
-        }
-
-
-
-
-    });
-
-
-    modal = document.getElementsByClassName("modal")[0];
-
-    //download_btn = document.getElementById("download-btn");
-    //download_btn.addEventListener("click", download_all);
-
+    getDeviations(info, 25, 0);
 })
-
-
-
 
 
 function getDeviations(data, limit, start) {
@@ -120,7 +67,7 @@ function processDeviations(deviations) {
 
 
 
-        str += `<div class="card }" style="background-image:url('${deviations[i].image}')"> <img class="mx-2" height="30" src="images/DeviantArt.png" alt=""></div>`
+        str += `<div class="card" style="background-image:url('${deviations[i].image}')"> <img class="mx-2" height="30" src="images/DeviantArt.png" alt=""></div>`
 
 
     }

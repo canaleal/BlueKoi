@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -6,16 +7,18 @@ using System.Net;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Xml;
+
 
 namespace BlueKoi_Service
 {
     
     public class APIService : IAPIService
     {
-        public string GetApiData(string search)
+        public string GetApiDataAlpha(string search)
         {
 
-            string url = "https://api.unsplash.com/search/photos/?client_id=" + "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY" + "&per_page=20&query=" + search;
+            string url = "https://api.unsplash.com/search/photos/?client_id=" + "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY" + "&per_page=40&query=" + search;
             HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
             myReq.ContentType = "application/json";
             HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();
@@ -27,6 +30,19 @@ namespace BlueKoi_Service
             }
             return text;
 
+        }
+
+        public string GetApiDataBeta(string search)
+        {
+            string url = "https://backend.deviantart.com/rss.xml?type=deviation&q=tag:" + search;
+            HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
+            myReq.ContentType = "application/xml";
+            HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();
+
+            XmlDocument xmlDoc = new XmlDocument();
+            xmlDoc.Load(response.GetResponseStream());
+            string jsonData = JsonConvert.SerializeXmlNode(xmlDoc);
+            return jsonData;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Xml;
 
 namespace BlueKoi_Service
 {
@@ -12,6 +13,9 @@ namespace BlueKoi_Service
     public interface IAPIService
     {
         [OperationContract]
-        string GetApiData(string search);
+        string GetApiDataAlpha(string search);
+
+        [OperationContract]
+        string GetApiDataBeta(string search);
     }
 }

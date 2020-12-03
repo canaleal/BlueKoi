@@ -16,6 +16,8 @@ using Newtonsoft.Json.Linq;
 using BlueKoi_Enterprise_Final_Project.Models.Payment;
 using BlueKoi_Enterprise_Final_Project.Models.Orders;
 using Newtonsoft.Json;
+using ServiceReference1;
+using System.Xml;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
@@ -24,6 +26,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
     public class HomeController : Controller
     {
+        APIServiceClient client = new APIServiceClient();
         private readonly VirtualStoreDBContext _context;
         private readonly IAccountRepository accountRepository;
         private readonly IItemRepository itemRepository;
@@ -60,7 +63,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 if (account != null)
                 {
                     TempData["ID"] = account.Id;
-                   
+                    
                     return RedirectToAction(nameof(StorePageView));
                 }
   
@@ -100,7 +103,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
 
         [HttpGet]
-        public ActionResult StorePageView(int accountId)
+        public async Task<ActionResult> StorePageViewAsync(int accountId)
         {
             int id;
 
@@ -116,12 +119,20 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
             if (TempData["Search"] != null)
             {
-                string text = 
+                string search = TempData["Search"].ToString();
+                string text = await client.GetApiDataAlphaAsync(search);
 
                 JObject json = JObject.Parse(text);
                 ViewBag.pinterest = search;
                 ViewBag.pinterestData = json["results"];
-               
+
+
+
+                string textXML = await client.GetApiDataBetaAsync(search);
+                JObject jsonDataVal = JObject.Parse(textXML);
+
+                ViewBag.dev = jsonDataVal["rss"]["channel"]["item"];
+
             }
             else
             {
@@ -192,7 +203,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
             if (ModelState.IsValid)
             {
-                TempData["Card"] = JsonConvert.SerializeObject(card, Formatting.Indented);              
+                TempData["Card"] = JsonConvert.SerializeObject(card);              
 
                 return RedirectToAction(nameof(ConfirmView));
             }
@@ -205,10 +216,6 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if(TempData["Card"] != null)
             {
                 Card card = JsonConvert.DeserializeObject<Card>(TempData["Card"].ToString());
-
-                //Get the cart using the ID
-                //Do service worker check here
-
 
                 ViewBag.url = card.ItemURL;
                 ViewBag.id = card.AccountId;
@@ -239,7 +246,6 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         {
             TempData["ID"] = id;
 
-    
             OrdersCart ordersCart = ordersCartRepository.GetAnOrdersCart(id);
             ViewBag.id = id;
             IEnumerable<Order> data = ordersCartRepository.GetOrders(ordersCart.Id);
