@@ -18,7 +18,7 @@ namespace BlueKoi_Service
         public string GetApiDataAlpha(string search)
         {
 
-            string url = "https://api.unsplash.com/search/photos/?client_id=" + "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY" + "&per_page=40&query=" + search;
+            string url = "https://api.unsplash.com/search/photos/?client_id=" + "byVpt0dHXyzvmAM-HixXGw_1TGQOxS4ViH1hIhNEanY" + "&per_page=60&query=" + search;
             HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
             myReq.ContentType = "application/json";
             HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();
@@ -29,12 +29,12 @@ namespace BlueKoi_Service
                 text = sr.ReadToEnd();
             }
             return text;
-
+            
         }
 
         public string GetApiDataBeta(string search)
         {
-            string url = "https://backend.deviantart.com/rss.xml?type=deviation&q=tag:" + search;
+            string url = "https://backend.deviantart.com/rss.xml?type=deviation&q=" + search;
             HttpWebRequest myReq = (HttpWebRequest)WebRequest.Create(url);
             myReq.ContentType = "application/xml";
             HttpWebResponse response = (HttpWebResponse)myReq.GetResponse();

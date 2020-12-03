@@ -14,11 +14,11 @@
             <div class="card-sign main-rounded col-lg-8 bg-light ">
 
                 <form asp-action="ConfirmView" class="needs-validation" novalidate>
-                    <input type="hidden" asp-for="OrderCartId" value="1" />
+                    <input type="hidden" asp-for="OrderCartId" value="@ViewBag.cartId" />
                     <input type="hidden" asp-for="ItemURL" value="@ViewBag.url" />
                     <input type="hidden" asp-for="OrderState" value="0" />
-
                     <input type="hidden" name="accountId" value="@ViewBag.id" />
+
                     <div class="row">
                         <div class="col-lg-8">
                             <h3 class="my-3">Order Details</h3>

@@ -18,12 +18,11 @@ using BlueKoi_Enterprise_Final_Project.Models.Orders;
 using Newtonsoft.Json;
 using ServiceReference1;
 using System.Xml;
+using System.Text.RegularExpressions;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
    
-
-
     public class HomeController : Controller
     {
         APIServiceClient client = new APIServiceClient();
@@ -52,6 +51,11 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             return View();
         }
 
+        /// <summary>
+        /// We used this method to get a user and pass the id to the storepage.
+        /// </summary>
+        /// <param name="loginAccount"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult LoginView(Account loginAccount)
         {
@@ -59,12 +63,10 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if (ModelState.IsValid)
             {
                 Account account = accountRepository.GetAnAccountEmailPass(loginAccount.UserEmail, loginAccount.UserPassword);
-                
+      
                 if (account != null)
-                {
-                    TempData["ID"] = account.Id;
-                    
-                    return RedirectToAction(nameof(StorePageView));
+                {  
+                    return RedirectToAction("StorePageView", "Home", new { id = account.Id});
                 }
   
             }
@@ -87,14 +89,11 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 bool accountExist = accountRepository.CheckAccount(newAccount);
                 if (!accountExist)
                 {
-                    accountRepository.Add(newAccount);
-                    TempData["ID"] = newAccount.Id;
-
-                    OrdersCart ordersCart = new OrdersCart();
-                    ordersCart.AccountId = newAccount.Id;
+                    accountRepository.Add(newAccount);               
+                    OrdersCart ordersCart = new OrdersCart(newAccount.Id);
                     ordersCartRepository.Add(ordersCart);
 
-                    return RedirectToAction(nameof(StorePageView));
+                    return RedirectToAction("StorePageView", "Home", new { id = newAccount.Id });
                 }
                
             }
@@ -103,67 +102,84 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult> StorePageViewAsync(int accountId)
+        public ActionResult StorePageView(int id, string searchData)
         {
-            int id;
 
-            if (TempData["ID"] != null)
+            if (TempData["Search"] != null || searchData != null)
             {
-                id = int.Parse(TempData["ID"].ToString());
+                try
+                {
+                    string search;
+                    if (TempData["Search"] != null)
+                    {
+                        search = TempData["Search"].ToString();
+                    }
+                    else
+                    {
+                        search = searchData;
+                    }
+
+                      Task<string> data;
+                      if (!search.Contains("by"))
+                      {
+                            data = GetDataAsyncAlpha(search);
+                            JObject json = JObject.Parse(data.Result);
+                            ViewBag.pinterest = search;
+                            ViewBag.pinterestData = json["results"];
+                      }
+                      else
+                      {
+                            data = GetDataAsyncBeta(search);
+                            JObject jsonDataVal = JObject.Parse(data.Result);
+                            ViewBag.devData = jsonDataVal["rss"]["channel"]["item"];
+                            
+                      }
+                    
+                }
+                catch
+                {
+                    ViewBag.msg = "Sorry, there was an Error. The Webservice could be down.";
+                }
+               
             }
-            else
-            {
-                id = accountId;
-            }
-            TempData["ID"] = id;
 
-            if (TempData["Search"] != null)
-            {
-                string search = TempData["Search"].ToString();
-                string text = await client.GetApiDataAlphaAsync(search);
-
-                JObject json = JObject.Parse(text);
-                ViewBag.pinterest = search;
-                ViewBag.pinterestData = json["results"];
-
-
-
-                string textXML = await client.GetApiDataBetaAsync(search);
-                JObject jsonDataVal = JObject.Parse(textXML);
-
-                ViewBag.dev = jsonDataVal["rss"]["channel"]["item"];
-
-            }
-            else
-            {
-                ViewBag.images = itemRepository.GetItems();
-            }
+            ViewBag.images = itemRepository.GetItems();
 
             return View(accountRepository.GetAnAccount(id));
         }
 
-       
+        public async Task<string> GetDataAsyncAlpha(string search)
+        {
+
+            string text = await client.GetApiDataAlphaAsync(search);
+            return text;
+        }
+
+        public async Task<string> GetDataAsyncBeta(string search)
+        {
+            string text = await client.GetApiDataBetaAsync(search);
+            return text;
+        }
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult StorePageView(string id, string search)
         {
-            TempData["ID"] = id;
             TempData["Search"] = search;
-            return RedirectToAction(nameof(StorePageView));
+            return RedirectToAction("StorePageView", "Home", new { id = int.Parse(id) });
         }
 
 
         [HttpGet]
         public ActionResult AccountView(int id)
         {
-            TempData["ID"] = id;
             return View(accountRepository.GetAnAccount(id));
         }
 
         [HttpGet]
         public ActionResult DeleteView(int id)
         {
-            TempData["ID"] = id;
             return View(accountRepository.GetAnAccount(id));
         }
 
@@ -181,7 +197,6 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         [HttpGet]
         public ActionResult ItemView(int id, string url)
         {
-            TempData["ID"] = id;
             ViewBag.url = url;
             return View(accountRepository.GetAnAccount(id));
         }
@@ -189,8 +204,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
         [HttpGet]
         public ActionResult CreditCardView(int id, string url)
-        {
-            TempData["ID"] = id;
+        {        
             ViewBag.id = id;
             ViewBag.url = url;
             return View();
@@ -203,9 +217,9 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
             if (ModelState.IsValid)
             {
-                TempData["Card"] = JsonConvert.SerializeObject(card);              
-
-                return RedirectToAction(nameof(ConfirmView));
+               
+               TempData["Card"] = JsonConvert.SerializeObject(card, Newtonsoft.Json.Formatting.Indented);
+               return RedirectToAction("ConfirmView", "Home");  
             }
             return View();
         }
@@ -215,17 +229,16 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         {
             if(TempData["Card"] != null)
             {
-                Card card = JsonConvert.DeserializeObject<Card>(TempData["Card"].ToString());
-
-                ViewBag.url = card.ItemURL;
-                ViewBag.id = card.AccountId;
+                Card savedCard = JsonConvert.DeserializeObject<Card>(TempData["Card"].ToString());
+                ViewBag.url = savedCard.ItemURL;
+                ViewBag.id = savedCard.AccountId;
+                ViewBag.cartId = ordersCartRepository.GetAnOrdersCart(savedCard.AccountId).Id;
                 return View();
             }
             else
             {
                 return RedirectToAction(nameof(StorePageView));
-            }
-          
+            }    
         }
 
         [HttpPost]
@@ -234,8 +247,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if (ModelState.IsValid)
             {
                 ordersCartRepository.AddOrder(order);
-                TempData["ID"] = int.Parse(accountId);
-                return RedirectToAction(nameof(StorePageView));
+                return RedirectToAction("StorePageView", "Home", new { id = int.Parse(accountId) });
             }          
             return View();
         }
@@ -244,11 +256,11 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         [HttpGet]
         public ActionResult OrderCartView(int id)
         {
-            TempData["ID"] = id;
 
-            OrdersCart ordersCart = ordersCartRepository.GetAnOrdersCart(id);
-            ViewBag.id = id;
+            OrdersCart ordersCart = ordersCartRepository.GetAnOrdersCart(id);         
             IEnumerable<Order> data = ordersCartRepository.GetOrders(ordersCart.Id);
+
+            ViewBag.id = id;
             return View(data);
         }
 

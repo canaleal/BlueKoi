@@ -15,6 +15,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
         public int CardNumber { get; set; }
 
         [Required(ErrorMessage = "Expire is required.")]
+        [RegularExpression(@"^(?:0[1-9]|1[0-2])(\d{2})$",
+         ErrorMessage = "Characters are not allowed.")]
         public int ExpireDate { get; set; }
 
         [Required(ErrorMessage = "CV is required.")]

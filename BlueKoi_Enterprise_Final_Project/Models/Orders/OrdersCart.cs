@@ -17,6 +17,9 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         [Column("AccountID")]
         public int AccountId { get; set; }
 
-       
+       public OrdersCart(int accountId)
+        {
+            AccountId = accountId;
+        }
     }
 }

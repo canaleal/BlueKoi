@@ -1,57 +1,51 @@
 ﻿@model BlueKoi_Enterprise_Final_Project.Models.Account
 
 @{
+    Layout = "_Layout";
     ViewData["Title"] = "DeleteView";
 }
 
-<h1>DeleteView</h1>
 
-<h3>Are you sure you want to delete this?</h3>
-<div>
-    <h4>Account</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserEmail)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserEmail)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserPassword)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserPassword)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.IsClosed)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IsClosed)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserState)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserState)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RecentSearch)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RecentSearch)
-        </dd>
-    </dl>
-    
-    <form asp-action="DeleteView">
-        <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
-    </form>
+
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-lg-12  align-center dark">
+            <div class="card-sign main-rounded col-lg-8 align-center bg-light text-center">
+                <div class="row">
+                    <div class="col-lg-6 d-none d-lg-block">
+                        <img class="image-sign"
+                             src="https://i.pinimg.com/564x/0e/34/ed/0e34ed0eb28d3460dbec0866a79d5659.jpg" alt="art">
+                    </div>
+                    <div class="col-lg-6 my-auto">
+                        <h3 class="my-3">STOP! Wait a minute.</h3>
+                        <form asp-action="SignUpView" class="needs-validation" novalidate>
+                            <input type="hidden" asp-for="Id" value="@Model.Id" />
+                            <input type="hidden" asp-for="UserEmail" value="@Model.UserEmail" />
+                            <input type="hidden" asp-for="UserName" value="@Model.UserName" />
+                            <input type="hidden" asp-for="UserPassword" value="@Model.UserPassword" />
+                            <input type="hidden" asp-for="UserState" value="@Model.UserState" />
+                            
+                            <p>Are you sure you want to delete your account? All account information, and images saved on your account will be deleted forever.</p>
+                            <p>If you still want to delete your account, click the 'Delete Everything' button below.</p>
+                            <hr class="my-3 d-none d-lg-block">
+                            <a asp-action="DeleteView" asp-route-id="@Model.Id" class="btn btn-danger btn-rounded btn-lg btn-block text-uppercase">
+                                Delete Everything
+                            </a>
+                        </form>
+
+                        <hr class="my-3 d-none d-lg-block">
+                        <a asp-action="AccountView" asp-route-id="@Model.Id">
+                            <i class="fa fa-long-arrow-left m-r-5"
+                               aria-hidden="true"></i> Do Not Delete Account!
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </div>
+
+    </div>
 </div>
