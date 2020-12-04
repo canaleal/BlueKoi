@@ -46,6 +46,12 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         {
             context.Orders.Add(order);
             context.SaveChanges();
-        }  
+        }
+
+        public void DeleteOrders(int orderCartId)
+        {
+            context.Orders.RemoveRange(context.Orders.Where(x => x.OrderCartId == orderCartId));
+            context.SaveChanges();
+        }
     }
 }

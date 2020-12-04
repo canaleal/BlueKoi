@@ -18,5 +18,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
 
         void AddOrder(Order order);
 
+        void DeleteOrders(int orderCartId);
+
     }
 }

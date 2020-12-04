@@ -29,13 +29,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
         [Required(ErrorMessage = "No image is selected.")]
         public string ItemURL { get; set; }
 
-        public bool IsSaleValid { get; set; } = false;
 
-        public void ConfirmSale()
-        {
-            //Use Stripe online processing tool. I dont have money for it right now
-            IsSaleValid = true;
-        }
 
     }
 }
