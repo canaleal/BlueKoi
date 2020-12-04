@@ -21,7 +21,6 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Data
 
         public DbSet<OrdersCart> OrdersCarts { get; set; }
 
-
         public DbSet<Order> Orders { get; set; }
     }
 }
