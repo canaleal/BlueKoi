@@ -102,7 +102,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
 
         [HttpGet]
-        public ActionResult StorePageView(int id, string searchData)
+        public ActionResult StorePageView(int id, string searchData, string specialItems)
         {
 
             if (TempData["Search"] != null || searchData != null)
@@ -136,7 +136,11 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 {
                     ViewBag.msg = "Sorry, there was an Error. The Webservice could be down.";
                 }
+            }
 
+            if(specialItems != null)
+            {
+                ViewBag.specialImages = itemRepository.GetSpecialItems();
             }
 
             ViewBag.images = itemRepository.GetItems();
@@ -210,13 +214,25 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
 
         [HttpPost]
-        public ActionResult CreditCardView(Card card)
+        public ActionResult CreditCardView(Card card, string IsSpecial)
         {
 
             if (ModelState.IsValid)
             {
+                
+                if(IsSpecial == "1")
+                {
+                    SpecialCard cardData = new SpecialCard() { AccountId = card.AccountId , CardHolder = card.CardHolder, CardNumber = card.CardNumber , ExpireDate  = card.ExpireDate , CVNumber = card.CVNumber , ItemURL = card.ItemURL , MerchantName = card.MerchantName };
+                    TempData["Type"] = 1;
+                    TempData["Card"] = JsonConvert.SerializeObject(cardData, Newtonsoft.Json.Formatting.Indented);
+                }
+                else
+                {
+                    RegularCard cardData = new RegularCard() { AccountId = card.AccountId , CardHolder = card.CardHolder, CardNumber = card.CardNumber, ExpireDate = card.ExpireDate, CVNumber = card.CVNumber, ItemURL = card.ItemURL, MerchantName = card.MerchantName };
+                    TempData["Type"] = 0;
+                    TempData["Card"] = JsonConvert.SerializeObject(cardData, Newtonsoft.Json.Formatting.Indented);
+                }
 
-                TempData["Card"] = JsonConvert.SerializeObject(card, Newtonsoft.Json.Formatting.Indented);
                 return RedirectToAction("ConfirmView", "Home");
             }
             return View();
@@ -227,10 +243,24 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         {
             if (TempData["Card"] != null)
             {
-                Card savedCard = JsonConvert.DeserializeObject<Card>(TempData["Card"].ToString());
-                ViewBag.url = savedCard.ItemURL;
-                ViewBag.id = savedCard.AccountId;
-                ViewBag.cartId = ordersCartRepository.GetAnOrdersCart(savedCard.AccountId).Id;
+
+                List<string> cardData;
+                if(TempData["Type"].ToString() == "0")
+                {
+                    var savedCard = JsonConvert.DeserializeObject<RegularCard>(TempData["Card"].ToString());
+                    cardData = new List<string>() { savedCard.CardSection.ToString(), savedCard.ItemURL, savedCard.AccountId.ToString()};
+                }
+                else
+                {
+                    var savedCard = JsonConvert.DeserializeObject<SpecialCard>(TempData["Card"].ToString());
+                    cardData = new List<string>() { savedCard.CardSection.ToString(), savedCard.ItemURL, savedCard.AccountId.ToString(), savedCard.CardType };
+                }
+
+                ViewBag.cardType = cardData[0];
+                ViewBag.url = cardData[1];
+                ViewBag.id = cardData[2];
+                ViewBag.cartId = ordersCartRepository.GetAnOrdersCart(int.Parse(cardData[2])).Id;
+                ViewBag.cardSection = cardData[3];
                 return View();
             }
             else
@@ -239,16 +269,28 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             }
         }
 
+
         [HttpPost]
-        public ActionResult ConfirmView(Order order, string accountId)
+        public ActionResult ConfirmView(Order order, string accountId, string cardType)
         {
             if (ModelState.IsValid)
             {
+               
                 ordersCartRepository.AddOrder(order);
+
+                //Special Order
+                if (cardType == "1")
+                {
+                    EmailData emailData = new EmailData();             
+                    emailData.SendMail(accountRepository.GetAnAccount(int.Parse(accountId)).UserEmail);
+                }
+
                 return RedirectToAction("StorePageView", "Home", new { id = int.Parse(accountId) });
             }
             return View();
         }
+
+       
 
 
         [HttpGet]

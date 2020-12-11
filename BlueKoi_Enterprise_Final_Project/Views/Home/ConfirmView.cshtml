@@ -14,6 +14,7 @@
             <div class="card-sign main-rounded col-lg-8 bg-light ">
 
                 <form asp-action="ConfirmView" class="needs-validation" novalidate>
+                    <input type="hidden" name="cardType" value="@ViewBag.cardType" />
                     <input type="hidden" asp-for="OrderCartId" value="@ViewBag.cartId" />
                     <input type="hidden" asp-for="ItemURL" value="@ViewBag.url" />
                     <input type="hidden" asp-for="OrderState" value="0" />
@@ -23,8 +24,9 @@
                         <div class="col-lg-8">
                             <h3 class="my-3">Order Details</h3>
                             <p>Item For: @ViewBag.id</p>
-                            <p>Carts ID: @ViewBag.cartId</p>
-                          
+                            <p>Cart ID : @ViewBag.cartId</p>
+                            <p>Card    : @ViewBag.cardSection</p>
+
                         </div>
                         <div class="col-lg-4">
                             <img class="my-3" height="200"

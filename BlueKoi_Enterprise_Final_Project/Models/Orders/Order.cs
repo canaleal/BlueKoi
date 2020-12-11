@@ -5,8 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+//Alex
 namespace BlueKoi_Enterprise_Final_Project.Models.Orders
 {
+    /// <summary>
+    /// An orders class to hold all information for the order including price and item url
+    /// </summary>
     [Table("Table_Order")]
     public class Order
     {

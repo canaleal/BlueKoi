@@ -5,8 +5,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+//Jasmine
 namespace BlueKoi_Enterprise_Final_Project.Models.Items
 {
+    /// <summary>
+    /// Item class used to hold all image information including the url
+    /// </summary>
     [Table("Table_Item")]
     public class Item
     {
@@ -35,5 +39,12 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Items
         [Column("Price")]
         [Range(1, 1000, ErrorMessage = "Price should be between 1 and 1000")]
         public double ItemPrice { get; set; }
+
+        [Column("Type")]
+        public string Type { get; set; }
+
+        [Column("SpecialOwner")]
+        [Required(ErrorMessage = "This is a special Item.")]
+        public ItemSpecialOwnerEnum SpecialOwner { get; set; }
     }
 }

@@ -6,8 +6,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
+//Angela
 namespace BlueKoi_Enterprise_Final_Project.Models
 {
+    /// <summary>
+    /// An Account class that will hold all user data including username and password
+    /// </summary>
     [Table("Table_Account")]
     public class Account
     {
@@ -33,11 +37,6 @@ namespace BlueKoi_Enterprise_Final_Project.Models
 
         [Column("RecentSearch")]
         public string RecentSearch { get; set; }
-
-        
-        public OrdersCart OrderCartList { get; set; }
-
-
 
     }
 }

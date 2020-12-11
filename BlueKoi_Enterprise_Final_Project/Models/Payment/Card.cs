@@ -4,8 +4,12 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
+//Alex
 namespace BlueKoi_Enterprise_Final_Project.Models.Payment
 {
+    /// <summary>
+    /// The parent class that contains all the infromation about the card used
+    /// </summary>
     public class Card
     {
         [Required(ErrorMessage = "Card holder is required.")]
@@ -14,7 +18,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
         [Required(ErrorMessage = "Card Number is required.")]
         public int CardNumber { get; set; }
 
-        [Required(ErrorMessage = "Expire is required.")]
+        [Required(ErrorMessage = "Expire data is required.")]
         [RegularExpression(@"^(?:0[1-9]|1[0-2])(\d{2})$",
          ErrorMessage = "Characters are not allowed.")]
         public int ExpireDate { get; set; }
@@ -29,7 +33,6 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
         [Required(ErrorMessage = "No image is selected.")]
         public string ItemURL { get; set; }
 
-
-
+        public string MerchantName { get; set; } = "Blue Koi";
     }
 }
