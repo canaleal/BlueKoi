@@ -54,7 +54,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         /// <summary>
         /// We used this method to get a user and pass the id to the storepage.
         /// </summary>
-        /// <param name="loginAccount"></param>
+        /// <param name="loginAccount">The account model that will be used to login</param>
         /// <returns></returns>
         [HttpPost]
         public ActionResult LoginView(Account loginAccount)
@@ -79,7 +79,11 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// Method to create a new user and register it into the account
+        /// </summary>
+        /// <param name="newAccount">The account that will be saved into the database</param>
+        /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult SignUpView(Account newAccount)
