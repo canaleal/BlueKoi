@@ -28,8 +28,8 @@ namespace BlueKoi_Service
             {
                 text = sr.ReadToEnd();
             }
-            return text;
             
+            return text;
         }
 
         public string GetApiDataBeta(string search)
