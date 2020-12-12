@@ -264,7 +264,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 ViewBag.url = cardData[1];
                 ViewBag.id = cardData[2];
                 ViewBag.cartId = ordersCartRepository.GetAnOrdersCart(int.Parse(cardData[2])).Id;
-                ViewBag.cardSection = cardData[3];
+      
                 return View();
             }
             else
@@ -305,6 +305,15 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             IEnumerable<Order> data = ordersCartRepository.GetOrders(ordersCart.Id);
             ViewBag.id = id;
             return View(data.Reverse());
+        }
+
+
+        [HttpPost]
+        public ActionResult OrderCartView(int accountId, int itemId)
+        {
+
+            ordersCartRepository.DeleteOrder(itemId);
+            return RedirectToAction("OrderCartView", "Home", new { id = accountId });
         }
 
 

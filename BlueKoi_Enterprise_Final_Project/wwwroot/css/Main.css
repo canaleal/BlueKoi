@@ -226,7 +226,7 @@ h1, h2, h3 {
     }
 }
 
-.card {
+.card-al {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -253,13 +253,19 @@ h1, h2, h3 {
     background-repeat: no-repeat;
 }
 
-    .card:hover {
+    .card-al:hover {
         -webkit-box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
         box-shadow: rgba(2, 8, 20, 0.1) 0px 0.35em 1.175em, rgba(2, 8, 20, 0.08) 0px 0.175em 0.5em;
         -webkit-transform: scale(1.01);
         transform: scale(1.01);
         cursor: pointer;
     }
+
+.card-img-top {
+    width: 100%;
+    height: 35vw;
+    object-fit: cover;
+}
 
 .nsfw {
     -webkit-filter: blur(8px);

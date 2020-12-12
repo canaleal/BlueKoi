@@ -75,6 +75,16 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         }
 
         /// <summary>
+        /// Delete an order from the database using the item id
+        /// </summary>
+        /// <param name="id">The id used to find the order in the database</param>
+        public void DeleteOrder(int id)
+        {
+            context.Orders.Remove(context.Orders.FirstOrDefault(a => a.Id == id));
+            context.SaveChanges();
+        }
+
+        /// <summary>
         /// Delete all orders in the database that match the order cart id
         /// </summary>
         /// <param name="orderCartId">The order cart id used to compare to the orders foreign key</param>

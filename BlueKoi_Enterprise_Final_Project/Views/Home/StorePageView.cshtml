@@ -84,7 +84,7 @@
             @foreach (var data in ViewBag.pinterestData)
                 {
             <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@data["urls"]["regular"]">
-                <div class="card " style="background-image:url(@data["urls"]["regular"])"> <img class="mx-2" height="30" src="~/images/Pinterest.png" alt=""></div>
+                <div class="card-al " style="background-image:url(@data["urls"]["regular"])"> <img class="mx-2" height="30" src="~/images/Pinterest.png" alt=""></div>
             </a>
                 }
         </div>
@@ -101,7 +101,7 @@
                 {
 
             <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@image["media:content"]["@url"]">
-                <div class="card " style="background-image:url(@image["media:content"]["@url"])"> <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt=""></div>
+                <div class="card-al " style="background-image:url(@image["media:content"]["@url"])"> <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt=""></div>
             </a>
 
                 }
@@ -116,7 +116,7 @@
             @foreach (var data in ViewBag.specialImages)
                 {
             <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@data.ItemURL">
-                <div class="card" style="background-image:url(@data.ItemURL)"> <img class="mx-2" height="30" src="~/images/ArtStation.png" alt=""></div>
+                <div class="card-al" style="background-image:url(@data.ItemURL)"> <img class="mx-2" height="30" src="~/images/ArtStation.png" alt=""></div>
             </a>
                 }
         </div>
@@ -131,7 +131,7 @@
             @foreach (var item in ViewBag.images)
                 {
             <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@item.ItemURL">
-                <div class="card " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
+                <div class="card-al " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
             </a>
                 }
         </div>

@@ -15,9 +15,11 @@
                         <h3 class="my-3">Login</h3>
 
                         <form asp-action="LoginView" class="needs-validation" novalidate>
-                            
+
                             <input type="hidden" asp-for="UserName" />
-                            <p asp-validation-for="UserEmail" class="text-danger"></p>
+                             <div class="row">
+                                <span asp-validation-for="UserEmail" class="text-danger"></span>
+                            </div>
                             <div class="input-group my-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
@@ -28,7 +30,9 @@
                                 <input asp-for="UserEmail" type="email" id="inputEmail" class="form-control" placeholder="Email"
                                        required autofocus>
                             </div>
-                            <p asp-validation-for="UserPassword" class="text-danger"></p>
+                            <div class="row">
+                                <span asp-validation-for="UserPassword" class="text-danger"></span>
+                            </div>
                             <div class="input-group my-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text">
@@ -57,11 +61,8 @@
                              src="https://i.pinimg.com/564x/fb/c0/3c/fbc03cc9e4494d978cb0396ed8390401.jpg" alt="art">
                     </div>
                 </div>
-
-
             </div>
         </div>
-
     </div>
 </div>
 
