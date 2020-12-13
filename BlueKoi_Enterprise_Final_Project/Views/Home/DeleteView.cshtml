@@ -18,19 +18,21 @@
                     </div>
                     <div class="col-lg-6 my-auto">
                         <h3 class="my-3">STOP! Wait a minute.</h3>
-                        <form asp-action="SignUpView" class="needs-validation" novalidate>
+                        <form asp-action="DeleteView" class="needs-validation" novalidate>
                             <input type="hidden" asp-for="Id" value="@Model.Id" />
                             <input type="hidden" asp-for="UserEmail" value="@Model.UserEmail" />
                             <input type="hidden" asp-for="UserName" value="@Model.UserName" />
                             <input type="hidden" asp-for="UserPassword" value="@Model.UserPassword" />
                             <input type="hidden" asp-for="UserState" value="@Model.UserState" />
-                            
+
                             <p>Are you sure you want to delete your account? All account information, and images saved on your account will be deleted forever.</p>
                             <p>If you still want to delete your account, click the 'Delete Everything' button below.</p>
                             <hr class="my-3 d-none d-lg-block">
-                            <a asp-action="DeleteView" asp-route-id="@Model.Id" class="btn btn-danger btn-rounded btn-lg btn-block text-uppercase">
-                                Delete Everything
-                            </a>
+                
+                            <button type="submit" value="Create" id="submit-btn"
+                                    class="btn btn-danger btn-rounded btn-lg btn-block text-uppercase">
+                                Delete
+                            </button>
                         </form>
 
                         <hr class="my-3 d-none d-lg-block">

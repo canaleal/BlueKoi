@@ -80,8 +80,13 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         /// <param name="id">The id used to find the order in the database</param>
         public void DeleteOrder(int id)
         {
-            context.Orders.Remove(context.Orders.FirstOrDefault(a => a.Id == id));
-            context.SaveChanges();
+            var order = context.Orders.FirstOrDefault(a => a.Id == id);
+            if(order != null)
+            {
+                context.Orders.Remove(context.Orders.FirstOrDefault(a => a.Id == id));
+                context.SaveChanges();
+            }
+   
         }
 
         /// <summary>

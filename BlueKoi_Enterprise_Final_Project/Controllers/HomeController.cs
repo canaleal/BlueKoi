@@ -221,7 +221,16 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 //Get the account ID
                 int accountId = deleteAccount.Id;
                 //Delete the orders then orders cart
-                ordersCartRepository.DeleteOrders(ordersCartRepository.GetAnOrdersCart(accountId).Id);
+                try
+                {
+                    ordersCartRepository.DeleteOrders(ordersCartRepository.GetAnOrdersCart(accountId).Id);
+                }
+                catch
+                {
+                    Debug.WriteLine("No orders");
+                }
+
+               
                 ordersCartRepository.Delete(accountId);
                 //Delete the account
                 accountRepository.Delete(deleteAccount);
