@@ -17,7 +17,8 @@
                         <form asp-action="LoginView" class="needs-validation" novalidate>
 
                             <input type="hidden" asp-for="UserName" />
-                             <div class="row">
+                            <div class="row">
+                               
                                 <span asp-validation-for="UserEmail" class="text-danger"></span>
                             </div>
                             <div class="input-group my-3">
@@ -31,6 +32,7 @@
                                        required autofocus>
                             </div>
                             <div class="row">
+                               
                                 <span asp-validation-for="UserPassword" class="text-danger"></span>
                             </div>
                             <div class="input-group my-3">

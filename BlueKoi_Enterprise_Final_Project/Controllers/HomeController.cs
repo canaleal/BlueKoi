@@ -68,7 +68,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 {
                     return RedirectToAction("StorePageView", "Home", new { id = account.Id });
                 }
-
+             
             }
             return View();
         }
