@@ -14,7 +14,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
     {
         [Required(ErrorMessage = "Card holder is required.")]
         public string CardHolder { get; set; }
-
+        
         [Required(ErrorMessage = "Card Number is required.")]
         public int CardNumber { get; set; }
 

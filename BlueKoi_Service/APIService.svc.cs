@@ -9,10 +9,12 @@ using System.ServiceModel;
 using System.Text;
 using System.Xml;
 
-
+//Alex 
 namespace BlueKoi_Service
 {
-    
+    /// <summary>
+    /// Api service page with two API
+    /// </summary>
     public class APIService : IAPIService
     {
         public string GetApiDataAlpha(string search)
