@@ -1,4 +1,4 @@
-﻿@model BlueKoi_Enterprise_Final_Project.Models.Payment.Card
+﻿@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
 
 @{
     Layout = "_Layout";
@@ -18,40 +18,43 @@
                         <i class="fab fa-cc-discover fa-3x mx-2"></i>
                     </div>
                     <form asp-action="CreditCardView" method="post">
-                        <input type="hidden" asp-for="AccountId" value="@ViewBag.id" />
-                        <input type="hidden" asp-for="ItemURL" value="@ViewBag.url" />
+                        <input type="hidden" asp-for="@Model.ItemId" value="@Model.ItemId" />
+                        <input type="hidden" asp-for="@Model.AccountId" value="@Model.AccountId" />
+
+                        <input type="hidden" asp-for="@Model.Card.AccountId" value="@Model.AccountId" />
+                        <input type="hidden" asp-for="@Model.Card.ItemId" value="@Model.ItemId" />
 
                         <div class="row">
-                            <span asp-validation-for="CardHolder" class="text-danger"></span>
+                            <span asp-validation-for="@Model.Card.CardHolder" class="text-danger"></span>
                         </div>
                         <div class="input-group my-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-user" aria-hidden="true"></i></span>
                             </div>
-                            <input asp-for="CardHolder" type="text" class="form-control" placeholder="Card Holder"
+                            <input asp-for="@Model.Card.CardHolder" type="text" class="form-control" placeholder="Card Holder"
                                    required autofocus>
                         </div>
 
                         <div class="row">
-                            <span asp-validation-for="CardNumber" class="text-danger"></span>
+                            <span asp-validation-for="@Model.Card.CardNumber" class="text-danger"></span>
                         </div>
                         <div class="input-group my-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
                             </div>
-                            <input asp-for="CardNumber" type="text" id="inputAccess" class="form-control" placeholder="Card Number"
+                            <input asp-for="@Model.Card.CardNumber" type="text" id="inputAccess" class="form-control" placeholder="Card Number"
                                    required>
                         </div>
 
                         <div class="row">
                             <div class="col">
-                                <span asp-validation-for="ExpireDate" class="text-danger"></span>
+                                <span asp-validation-for="@Model.Card.ExpireDate" class="text-danger"></span>
                             </div>
                             <div class="col">
-                                <span asp-validation-for="CVNumber" class="text-danger"></span>
+                                <span asp-validation-for="@Model.Card.CVNumber" class="text-danger"></span>
                             </div>
                         </div>
-                       
+
                         <div class="row">
 
                             <div class="col">
@@ -61,7 +64,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="fas fa-credit-card"></i></span>
                                     </div>
-                                    <input asp-for="ExpireDate" type="text" class="form-control" placeholder="MM/YYYY"
+                                    <input asp-for="@Model.Card.ExpireDate" type="text" class="form-control" placeholder="MM/YYYY"
                                            required>
                                 </div>
 
@@ -73,7 +76,7 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text"><i class="far fa-credit-card"></i></span>
                                     </div>
-                                    <input asp-for="CVNumber" type="text" id="inputSecurity" class="form-control" placeholder="###"
+                                    <input asp-for="@Model.Card.CVNumber" type="text" id="inputSecurity" class="form-control" placeholder="###"
                                            required>
                                 </div>
 

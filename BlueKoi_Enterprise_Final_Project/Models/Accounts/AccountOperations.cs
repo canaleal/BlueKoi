@@ -106,6 +106,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Accounts
         {
 
             Account account = context.Accounts.Where(a => a.UserEmail.Equals(accountCheck.UserEmail)).FirstOrDefault();
+          
 
             if (account == null || !encryption.Authenticate(accountCheck.UserPassword, account.UserPassword))
             {

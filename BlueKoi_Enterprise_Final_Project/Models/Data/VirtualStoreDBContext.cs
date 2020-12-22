@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BlueKoi_Enterprise_Final_Project.Models.Orders;
+using BlueKoi_Enterprise_Final_Project.Models.ShopCart;
 
 //Alex
 namespace BlueKoi_Enterprise_Final_Project.Models.Data
@@ -25,5 +26,9 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Data
         public DbSet<OrdersCart> OrdersCarts { get; set; }
 
         public DbSet<Order> Orders { get; set; }
+
+        public DbSet<ShoppingCart> ShoppingCarts { get; set; }
+
+        public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
     }
 }

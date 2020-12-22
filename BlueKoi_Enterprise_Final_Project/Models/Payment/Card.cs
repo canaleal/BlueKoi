@@ -31,7 +31,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Payment
         public int AccountId { get; set; }
 
         [Required(ErrorMessage = "No image is selected.")]
-        public string ItemURL { get; set; }
+        public int ItemId { get; set; }
 
         public string MerchantName { get; set; } = "Blue Koi";
     }

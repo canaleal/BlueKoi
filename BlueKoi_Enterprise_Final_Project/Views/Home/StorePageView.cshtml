@@ -1,5 +1,5 @@
 ﻿
-@model BlueKoi_Enterprise_Final_Project.Models.Account
+@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
 
 @{
     Layout = "_Layout";
@@ -9,7 +9,7 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark dark py-3">
     <div class="container">
-        <a asp-action="StorePageView" asp-route-id="@Model.Id" class="navbar-brand">
+        <a asp-action="StorePageView" asp-route-id="@Model.Account.Id" class="navbar-brand">
             <img src="~/images/BlueKoi.png" width="30" height="30" class="d-inline-block align-top mr-2 rotate" alt="">
             <span>Blue Koi</span>
         </a>
@@ -20,45 +20,39 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav w-100">
                 <form asp-action="StorePageView" method="post" class="form-inline my-2 mx-lg-auto">
-                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="id" value="@Model.Account.Id" />
                     <input name="search" class="form-control mr-sm-2 form-wide" type="search" placeholder="Search" autocomplete="off" aria-label="Search">
                     <button id="search-btn" class="btn btn-white btn-purple my-2  my-sm-0" type="submit"><i class="fas fa-search"></i></button>
                 </form>
 
                 <li>
-                    <a class="nav-link active" asp-action="AccountView" asp-route-id="@Model.Id">Account</a>
+                    <a class="nav-link active" asp-action="AccountView" asp-route-id="@Model.Account.Id">Account</a>
                 </li>
                 <li>
-                    <a class="nav-link active" asp-action="OrderCartView" asp-route-id="@Model.Id">Orders <i class="fas fa-shopping-cart"></i></a>
+                    <a class="nav-link active" asp-action="OrderCartView" asp-route-id="@Model.Account.Id">Orders <i class="fas fa-border-all"></i></a>
                 </li>
-
+                <li>
+                    <a class="nav-link active" asp-action="ShoppingCartView" asp-route-id="@Model.Account.Id">Cart <i class="fas fa-shopping-cart"></i></a>
+                </li>
             </ul>
         </div>
     </div>
 </nav>
 
-<div class="container-fluid bg-dark py-2">
-    <div class="container">
-        <div class="row justify-content-between">
-            <img class="mx-2" height="30" src="~/images/ArtStation.png" alt="">
-            <img class="mx-2" height="30" src="~/images/Pinterest.png" alt="">
-            <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt="">
-        </div>
-    </div>
-</div>
+
 
 <div class="container-fluid bg-dark py-4">
     <div class="container">
         <div class="row align-center ">
             
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%leifheanzo">leifheanzo</a>
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%snatti89">Snatti89</a>
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%unpreti">Unpreti</a>
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%nixeu">Nixeu</a>
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%wlop">Wlop</a>
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%talros">talros</a>
-            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-searchData="by%razaras">Razaras</a>
-            <a class="btn btn-danger mx-1" asp-action="StorePageView" asp-route-id="@Model.Id" asp-route-specialItems="special%KOIDB">Special Items</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%leifheanzo">leifheanzo</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%snatti89">Snatti89</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%unpreti">Unpreti</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%nixeu">Nixeu</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%wlop">Wlop</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%talros">talros</a>
+            <a class="btn btn-white btn-purple mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-searchData="by%razaras">Razaras</a>
+            <a class="btn btn-danger mx-1" asp-action="StorePageView" asp-route-id="@Model.Account.Id" asp-route-specialItems="special%KOIDB">Special Items</a>
         </div>
     </div>
 </div>
@@ -68,76 +62,62 @@
 
     @if (ViewBag.msg != null)
     {
-    <div class="container py-2">
-        <p class="text-danger py-2">@ViewBag.msg</p>
-    </div>
+        <div class="container py-2">
+            <p class="text-danger py-2">@ViewBag.msg</p>
+        </div>
 
     }
 
-    @if (ViewBag.pinterestData != null)
+    @if (Model.ItemsSimple1 != null)
     {
-    <div class="container py-2">
-
-        <div class="brgrid">
-            @foreach (var data in ViewBag.pinterestData)
+        <div class="container py-2">
+            <div class="brgrid">
+                @foreach (var image in Model.ItemsSimple1)
                 {
-            <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@data["urls"]["regular"]">
-                <div class="card-al " style="background-image:url(@data["urls"]["regular"])"> <img class="mx-2" height="30" src="~/images/Pinterest.png" alt=""></div>
-            </a>
-                }
-        </div>
-    </div>
 
+                    <a asp-action="ItemView" asp-route-id="@Model.Account.Id" asp-route-url="@image["urls"]["regular"]">
+                        <div class="card-al " style="background-image:url(@image["urls"]["regular"])"> <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt=""></div>
+                    </a>
+
+                }
+            </div>
+        </div>
     }
 
 
-    @if (ViewBag.devData != null)
+    @if (Model.ItemsSimple2 != null)
     {
-    <div class="container py-2">
-        <div class="brgrid">
-            @foreach (var image in ViewBag.devData)
+        <div class="container py-2">
+            <div class="brgrid">
+                @foreach (var image in Model.ItemsSimple2)
                 {
 
-            <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@image["media:content"]["@url"]">
-                <div class="card-al " style="background-image:url(@image["media:content"]["@url"])"> <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt=""></div>
-            </a>
+                    <a asp-action="ItemView" asp-route-id="@Model.Account.Id" asp-route-url="@image["media:content"]["@url"]">
+                        <div class="card-al " style="background-image:url(@image["media:content"]["@url"])"> <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt=""></div>
+                    </a>
 
                 }
+            </div>
         </div>
-    </div>
-    }
-
-    @if (ViewBag.specialImages != null){
-    <div class="container py-2">
-
-        <div class="brgrid">
-            @foreach (var data in ViewBag.specialImages)
-                {
-            <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@data.ItemURL">
-                <div class="card-al" style="background-image:url(@data.ItemURL)"> <img class="mx-2" height="30" src="~/images/ArtStation.png" alt=""></div>
-            </a>
-                }
-        </div>
-    </div>
     }
 
 
-
-    <div class="container py-2">
-        <h5>Set : Developer Favorites</h5>
-        <div class="brgrid">
-            @foreach (var item in ViewBag.images)
+    @if (Model.Items != null)
+    {
+        <div class="container py-2">
+            <h5>Set : Developer Favorites</h5>
+            <div class="brgrid">
+                @foreach (var item in Model.Items)
                 {
-            <a asp-action="ItemView" asp-route-id="@Model.Id" asp-route-url="@item.ItemURL">
-                <div class="card-al " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
-            </a>
+                    <a asp-action="ItemView" asp-route-id="@Model.Account.Id" asp-route-itemId="@item.Id">
+                        <div class="card-al " style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
+
+                    </a>
+
                 }
+            </div>
         </div>
-    </div>
-
-
-
-
+    }
 
 
 </main>

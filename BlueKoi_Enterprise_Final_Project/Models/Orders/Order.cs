@@ -23,6 +23,9 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Orders
         [Column("URL")]
         public string ItemURL { get; set; }
 
+        [Column("ItemId")]
+        public int ItemId { get; set; }
+
         [Column("Price")]
         public double Price { get; set; }
 

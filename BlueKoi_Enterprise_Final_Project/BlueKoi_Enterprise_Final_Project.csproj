@@ -30,4 +30,10 @@
     <WCFMetadata Include="Connected Services" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\Account\" />
+    <Folder Include="Views\Item\" />
+    <Folder Include="Views\Order\" />
+  </ItemGroup>
+
 </Project>

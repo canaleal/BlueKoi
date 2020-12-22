@@ -46,5 +46,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Items
         [Column("SpecialOwner")]
         [Required(ErrorMessage = "This is a special Item.")]
         public ItemSpecialOwnerEnum SpecialOwner { get; set; }
+
+        [Column("Size")]
+        public string Size { get; set; }
     }
 }

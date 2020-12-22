@@ -77,5 +77,11 @@ namespace BlueKoi_Enterprise_Final_Project.Models.Items
             List<Item> list = context.Items.Where(x => x.Type == "Special").ToList();
             return list;
         }
+
+        public void AddBulkItems(IEnumerable<Item> items)
+        {
+            context.Items.AddRange(items);
+            context.SaveChanges();
+        }
     }
 }

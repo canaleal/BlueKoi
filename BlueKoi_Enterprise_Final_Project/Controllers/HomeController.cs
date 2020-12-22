@@ -19,6 +19,8 @@ using Newtonsoft.Json;
 using ServiceReference1;
 using System.Xml;
 using System.Text.RegularExpressions;
+using BlueKoi_Enterprise_Final_Project.Models.ShopCart;
+using BlueKoi_Enterprise_Final_Project.Models.ViewModels;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
@@ -30,13 +32,16 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         private readonly IAccountRepository accountRepository;
         private readonly IItemRepository itemRepository;
         private readonly IOrdersCartRepository ordersCartRepository;
+        private readonly IShoppingCartRepository shoppingCartRepository;
 
-        public HomeController(IAccountRepository accountRepository, IItemRepository itemRepository, IOrdersCartRepository ordersCartRepository)
+        public HomeController(IAccountRepository accountRepository, IItemRepository itemRepository, IOrdersCartRepository ordersCartRepository, IShoppingCartRepository shoppingCartRepository)
         {
 
             this.accountRepository = accountRepository;
             this.itemRepository = itemRepository;
             this.ordersCartRepository = ordersCartRepository;
+            this.shoppingCartRepository = shoppingCartRepository;
+
         }
 
         [HttpGet]
@@ -63,13 +68,16 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             if (ModelState.IsValid)
             {
                 Account account = accountRepository.GetAnAccountEmailPass(loginAccount.UserEmail, loginAccount.UserPassword);
-
+                
                 if (account != null)
                 {
                     return RedirectToAction("StorePageView", "Home", new { id = account.Id });
                 }
-             
+
+                //Add error
+                ViewBag.Message = "An error occured. Try again.";
             }
+        
             return View();
         }
 
@@ -90,17 +98,25 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool accountExist = accountRepository.CheckAccount(newAccount);
-                if (!accountExist)
+
+                if (!accountRepository.CheckAccount(newAccount))
                 {
                     accountRepository.Add(newAccount);
+
                     OrdersCart ordersCart = new OrdersCart(newAccount.Id);
                     ordersCartRepository.Add(ordersCart);
+
+                    ShoppingCart shoppingCart = new ShoppingCart(newAccount.Id);
+                    shoppingCartRepository.Add(shoppingCart);
 
                     return RedirectToAction("StorePageView", "Home", new { id = newAccount.Id });
                 }
 
+
+                //Add error
+                ViewBag.Message = "An error occured. Try again.";
             }
+
             return View();
         }
 
@@ -112,34 +128,37 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         /// <param name="specialItems">Search data for the saved artists</param>
         /// <returns>Action result with view</returns>
         [HttpGet]
-        public ActionResult StorePageView(int id, string searchData, string specialItems)
+        public ActionResult StorePageView(int id, string searchData, string specialItems, bool hadError)
         {
+           
+
+
+            ViewModelData viewModelData = new ViewModelData();
+            viewModelData.Account = accountRepository.GetAnAccount(id);
+
+            IEnumerable<Item> items = specialItems == null ? itemRepository.GetItems() : itemRepository.GetSpecialItems();
+            viewModelData.Items = items;
+
             //Check if search exists and try getting the data
-            if (TempData["Search"] != null || searchData != null)
+            if (searchData != null)
             {
                 try
                 {
-                    //Get the search result
-                    string search = TempData["Search"] != null ? TempData["Search"].ToString() : searchData;
-
-                    Task<string> data;
+                   
+                    JToken data;
                     client = new APIServiceClient();
-                    if (!search.Contains("by"))
-                    {
-                       
-                        //Get the data from the service using API Aplha
-                        data = GetDataAsyncAlpha(search);
-                        JObject json = JObject.Parse(data.Result);
-                        ViewBag.pinterestData = json["results"];
-                        
+                    if (!searchData.Contains("by"))
+                    {                      
+                        JObject json = JObject.Parse(GetDataAsyncAlpha(searchData).Result);
+                        data = json["results"];
+                        viewModelData.ItemsSimple1 = data;
                     }
                     else
                     {
                         //Get the data from the service using API Beta
-                        data = GetDataAsyncBeta(search);
-                        JObject jsonDataVal = JObject.Parse(data.Result);
-                        ViewBag.devData = jsonDataVal["rss"]["channel"]["item"];
-                        
+                        JObject jsonDataVal = JObject.Parse(GetDataAsyncBeta(searchData).Result);
+                        data = jsonDataVal["rss"]["channel"]["item"];
+                        viewModelData.ItemsSimple2 = data;
                     }
                     client.CloseAsync();
                 }
@@ -149,16 +168,14 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 }
             }
 
-            //If the search also includes special artists
-            if(specialItems != null)
+            if(hadError)
             {
-                ViewBag.specialImages = itemRepository.GetSpecialItems();
+                ViewBag.Message = "An error occured. Try again.";
             }
 
-            //Get developer imagaes
-            ViewBag.images = itemRepository.GetItems();
+       
 
-            return View(accountRepository.GetAnAccount(id));
+            return View(viewModelData);
         }
 
         /// <summary>
@@ -189,16 +206,25 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         /// <returns>Action result with a redirect</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult StorePageView(string id, string search)
+        public ActionResult StorePageView(int id, string search)
         {
-            return RedirectToAction("StorePageView", "Home", new { id = int.Parse(id), searchData = search });
+            return RedirectToAction("StorePageView", "Home", new { id, searchData = search });
         }
 
 
         [HttpGet]
         public ActionResult AccountView(int id)
         {
-            return View(accountRepository.GetAnAccount(id));
+            try
+            {
+                Account account = accountRepository.GetAnAccount(id);
+                return View();
+            }
+            catch{
+
+                return RedirectToAction("StorePageView", "Home", new { id, errorMessage = true });
+            }
+           
         }
 
         [HttpGet]
@@ -218,42 +244,68 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                //Get the account ID
-                int accountId = deleteAccount.Id;
-                //Delete the orders then orders cart
+              
                 try
                 {
+                    //Get the account ID
+                    int accountId = deleteAccount.Id;
+
+                    //Delete the content
                     ordersCartRepository.DeleteOrders(ordersCartRepository.GetAnOrdersCart(accountId).Id);
+                    ordersCartRepository.Delete(accountId);
+                    shoppingCartRepository.Delete(accountId);                
+                    accountRepository.Delete(deleteAccount);
+
+                    return RedirectToAction(nameof(Index));
                 }
                 catch
                 {
-                    Debug.WriteLine("No orders");
+                    //Add error
+                    ViewBag.Message = "An error occured. Try again.";
                 }
-
-               
-                ordersCartRepository.Delete(accountId);
-                //Delete the account
-                accountRepository.Delete(deleteAccount);
-                return RedirectToAction(nameof(Index));
+     
             }
             return View();
 
         }
 
         [HttpGet]
-        public ActionResult ItemView(int id, string url)
+        public ActionResult ItemView(int id, int itemId, string url)
         {
-            ViewBag.url = url;
-            return View(accountRepository.GetAnAccount(id));
+
+            try
+            {           
+                ViewModelData viewModelData = new ViewModelData();
+                viewModelData.Account = accountRepository.GetAnAccount(id);
+
+                if (itemId > 0)
+                {
+                    viewModelData.Item = itemRepository.GetAnItem(itemId);
+
+                }
+                else
+                {
+                    viewModelData.ItemSimple = url;
+                }
+
+                return View(viewModelData);
+            }
+            catch
+            {
+                return RedirectToAction("StorePageView", "Home", new { id, errorMessage = true });
+            }         
         }
 
 
         [HttpGet]
-        public ActionResult CreditCardView(int id, string url)
+        public ActionResult CreditCardView(int id, int itemId)
         {
-            ViewBag.id = id;
-            ViewBag.url = url;
-            return View();
+
+            ViewModelData viewModelData = new ViewModelData();
+            viewModelData.AccountId = id;
+            viewModelData.ItemId = itemId;
+
+            return View(viewModelData);
         }
 
         /// <summary>
@@ -263,29 +315,44 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         /// <param name="IsSpecial"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult CreditCardView(Card card, string IsSpecial)
+        public ActionResult CreditCardView(ViewModelData viewModelData, string IsSpecial)
         {
+
+ 
 
             if (ModelState.IsValid)
             {
-                //If the card is special or not
-                if(IsSpecial == "1")
+                try
                 {
-                    SpecialCard cardData = new SpecialCard() { AccountId = card.AccountId , CardHolder = card.CardHolder, CardNumber = card.CardNumber , ExpireDate  = card.ExpireDate , CVNumber = card.CVNumber , ItemURL = card.ItemURL , MerchantName = card.MerchantName };
-                    TempData["Type"] = 1;
-                    TempData["Card"] = JsonConvert.SerializeObject(cardData, Newtonsoft.Json.Formatting.Indented);
-                }
-                else
-                {
-                    RegularCard cardData = new RegularCard() { AccountId = card.AccountId , CardHolder = card.CardHolder, CardNumber = card.CardNumber, ExpireDate = card.ExpireDate, CVNumber = card.CVNumber, ItemURL = card.ItemURL, MerchantName = card.MerchantName };
-                    TempData["Type"] = 0;
-                    TempData["Card"] = JsonConvert.SerializeObject(cardData, Newtonsoft.Json.Formatting.Indented);
-                }
+                    Card card = viewModelData.Card;
 
-                return RedirectToAction("ConfirmView", "Home");
+                    //If the card is special or not
+                    if (IsSpecial == "1")
+                    {
+                        viewModelData.Card = new SpecialCard() { AccountId = card.AccountId, CardHolder = card.CardHolder, CardNumber = card.CardNumber, ExpireDate = card.ExpireDate, CVNumber = card.CVNumber, ItemId = card.ItemId, MerchantName = card.MerchantName };
+                        viewModelData.CardType = 1;
+                    }
+                    else
+                    {
+                        viewModelData.Card = new RegularCard() { AccountId = card.AccountId, CardHolder = card.CardHolder, CardNumber = card.CardNumber, ExpireDate = card.ExpireDate, CVNumber = card.CVNumber, ItemId = card.ItemId, MerchantName = card.MerchantName };
+                        viewModelData.CardType = 0;
+                    }
+
+                    TempData["ViewModelData"] = JsonConvert.SerializeObject(viewModelData);
+                    return RedirectToAction("ConfirmView", "Home");
+                }
+                catch{
+                    //Add error
+                    ViewBag.Message = "An error occured. Try again.";
+                }
+              
             }
             return View();
+
         }
+
+
+        
 
         /// <summary>
         /// Confirm view with all account data and order data
@@ -295,30 +362,12 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         public ActionResult ConfirmView()
         {
             //If card exists, perform action
-            if (TempData["Card"] != null)
+            if (TempData["ViewModelData"] != null)
             {
-                //Save the card data in list
-                List<string> cardData;
-
-                //Check what type of card is used. 0 for regular, 1 for special
-                if(TempData["Type"].ToString() == "0")
-                {
-                    var savedCard = JsonConvert.DeserializeObject<RegularCard>(TempData["Card"].ToString());
-                    cardData = new List<string>() { savedCard.CardSection.ToString(), savedCard.ItemURL, savedCard.AccountId.ToString()};
-                }
-                else
-                {
-                    var savedCard = JsonConvert.DeserializeObject<SpecialCard>(TempData["Card"].ToString());
-                    cardData = new List<string>() { savedCard.CardSection.ToString(), savedCard.ItemURL, savedCard.AccountId.ToString(), savedCard.CardType };
-                }
-
-                //Save the data
-                ViewBag.cardType = cardData[0];
-                ViewBag.url = cardData[1];
-                ViewBag.id = cardData[2];
-                ViewBag.cartId = ordersCartRepository.GetAnOrdersCart(int.Parse(cardData[2])).Id;
-      
-                return View();
+                ViewModelData viewModelData = JsonConvert.DeserializeObject<ViewModelData>((string)TempData["ViewModelData"]);
+                viewModelData.OrderCartId = ordersCartRepository.GetAnOrdersCart(viewModelData.AccountId).Id;
+                viewModelData.Item = itemRepository.GetAnItem(viewModelData.ItemId);
+                return View(viewModelData);
             }
             else
             {
@@ -334,20 +383,21 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         /// <param name="cardType">The type of card used. Special or regular</param>
         /// <returns>Action result with view</returns>
         [HttpPost]
-        public ActionResult ConfirmView(Order order, string accountId, string cardType)
+        public ActionResult ConfirmViewPost(ViewModelData viewModelData)
         {
             if (ModelState.IsValid)
-            {               
+            {
+                Order order = viewModelData.Order;
                 ordersCartRepository.AddOrder(order);
 
                 //If card is special, send an email
-                if (cardType == "1")
+                if (viewModelData.CardType == 1)
                 {
                     EmailData emailData = new EmailData();
-                    emailData.SendMail(accountRepository.GetAnAccount(int.Parse(accountId)).UserEmail);
+                    emailData.SendMail(accountRepository.GetAnAccount(viewModelData.AccountId).UserEmail);
                 }
 
-                return RedirectToAction("StorePageView", "Home", new { id = int.Parse(accountId) });
+                return RedirectToAction("StorePageView", "Home", new { id = viewModelData.AccountId });
             }
             return View();
         }
@@ -362,13 +412,22 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         [HttpGet]
         public ActionResult OrderCartView(int id)
         {
-            //Get the orders
-            OrdersCart ordersCart = ordersCartRepository.GetAnOrdersCart(id);
-            IEnumerable<Order> data = ordersCartRepository.GetOrders(ordersCart.Id);
-            ViewBag.id = id;
 
-            //Return the orders, but reverse them to show the latest
-            return View(data.Reverse());
+            try
+            {
+                ViewModelData viewModelData = new ViewModelData();
+                viewModelData.AccountId = id;
+                OrdersCart ordersCart = ordersCartRepository.GetAnOrdersCart(id);
+                IEnumerable<Order> data = ordersCartRepository.GetOrders(ordersCart.Id);
+                viewModelData.Orders = data;
+
+                return View(viewModelData);
+            }
+            catch
+            {
+                return RedirectToAction("StorePageView", "Home", new { id, errorMessage = true });
+            }
+           
         }
 
         /// <summary>
@@ -378,12 +437,60 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         /// <param name="itemId">The item id that will be used to find and delete the image</param>
         /// <returns>Action result with redirect</returns>
         [HttpPost]
-        public ActionResult OrderCartView(int accountId, int itemId)
+        public ActionResult OrderCartView(int id, int orderId)
         {
-            ordersCartRepository.DeleteOrder(itemId);
-            return RedirectToAction("OrderCartView", "Home", new { id = accountId });
+            try
+            {
+                ordersCartRepository.DeleteOrder(orderId);
+                return RedirectToAction("OrderCartView", "Home", new { id = id });
+            }
+            catch
+            {
+                return RedirectToAction("StorePageView", "Home", new { id, errorMessage = true });
+            }
+          
         }
 
+
+        [HttpGet]
+        public ActionResult ShoppingCartView(int id)
+        {
+            try
+            {
+                ViewModelData viewModelData = new ViewModelData();
+                viewModelData.AccountId = id;
+                ShoppingCart shoppingCart = shoppingCartRepository.GetAShoppingCart(id);
+                IEnumerable<ShoppingCartItem> data = shoppingCartRepository.GetSavedItems(shoppingCart.Id);
+                viewModelData.ShoppingCartItems = data ?? null;
+
+                return View(viewModelData);
+            }
+            catch
+            {
+                return RedirectToAction("StorePageView", "Home", new { id, errorMessage = true });
+            }
+        }
+
+        [HttpPost]
+        public ActionResult SaveItemView(ViewModelData viewModelData)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                ShoppingCart shoppingCart = shoppingCartRepository.GetAShoppingCart(viewModelData.AccountId);
+                Item item = itemRepository.GetAnItem(viewModelData.ItemId);
+
+                ShoppingCartItem shoppingCartItem = new ShoppingCartItem();
+                shoppingCartItem.ItemURL = item.ItemURL;
+                shoppingCartItem.Price = item.ItemPrice;
+                shoppingCartItem.ShoppingCartId = shoppingCart.Id;
+                shoppingCartRepository.AddShoppingCartItem(shoppingCartItem);
+                return RedirectToAction("StorePageView", "Home", new { id = viewModelData.AccountId });
+
+            }
+            return View();
+        }
 
 
     }
