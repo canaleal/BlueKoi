@@ -1,0 +1,55 @@
+﻿@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
+
+@{
+    ViewData["Title"] = "OrderCartView";
+    Layout = "_LayoutOrder";
+}
+
+
+
+<div class="container my-5">
+    <h5>Orders Cart</h5>
+    @if (Model.Orders.Any())
+    {
+        <div class="row ">
+            @foreach (var item in Model.Orders)
+            {
+
+                <div class="col-lg-4 my-3">
+                    <div class="card">
+                        <img class="card-img-top" src="@item.ItemURL" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Order: @item.Id</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Price: $@item.Price</h6>
+                            <p class="card-text">The order was @item.OrderState. You can download your image by clicking the button below.</p>
+                        </div>
+                        <div class="card-body">
+                           
+                            <a href="@item.ItemURL" class="btn btn-white btn-purple btn-block">View Image</a>
+                            <hr />
+                            <p>Delete the order. There is no way to recover the order.</p>
+                            <form asp-action="OrderCartView" asp-controller="Order" method="post" class="mt-2">
+                                <input type="hidden" name="id" value="@Model.AccountId" />
+                                <input type="hidden" name="orderId" value="@item.Id" />
+                                <button id="search-btn" class="ml-auto btn btn-danger  btn-block" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-danger">No Orders Placed!</p>
+    }
+
+</div>
+
+
+
+
+
+
+

@@ -7,7 +7,6 @@
 
 
 
-
 <div class="container-fluid h-100">
     <div class="row h-100">
         <div class="col-lg-12  align-center dark">
@@ -20,17 +19,17 @@
                     <input type="hidden" asp-for="@Model.Order.ItemId" value="@Model.Item.Id" />
                     <input type="hidden" asp-for="@Model.Order.ItemURL" value="@Model.Item.ItemURL" />
                     <input type="hidden" asp-for="@Model.Order.OrderState" value="0" />
-                    <input type="hidden" asp-for="@Model.AccountId" value="@Model.AccountId" />
+                 
 
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="col-lg-6">
                             <h3 class="my-3">Order Details</h3>
                             <p>Account : @Model.AccountId</p>
                             <p>Cart ID : @Model.OrderCartId</p>
 
 
                         </div>
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <img class="my-3" height="200"
                                  src="@Model.Item.ItemURL" alt="art">
                         </div>
@@ -47,7 +46,7 @@
 
                             <tr>
                                 <th scope="row">Estimated Tax</th>
-                                <td>$FREE</td>
+                                <td>$0.00</td>
 
                             </tr>
                             <tr class="bg-secondary text-white">

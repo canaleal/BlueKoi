@@ -1,0 +1,62 @@
+﻿@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewData["Title"] - BlueKoi_Enterprise_Final_Project</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/ed2dadc4ab.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="~/css/main.css">
+</head>
+<body>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark dark py-3">
+        <div class="container">
+            <a asp-action="StorePageView" asp-route-id="@Model.AccountId" asp-controller="Item" class="navbar-brand">
+                <img src="~/images/BlueKoi.png" width="30" height="30" class="d-inline-block align-top mr-2 rotate" alt="">
+                <span>Blue Koi</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav w-100">
+
+                    <li class="ml-auto">
+                        <a class="nav-link active" asp-action="AccountView" asp-controller="Account" asp-route-id="@Model.AccountId">Account</a>
+                    </li>
+                    <li>
+                        <a class="nav-link active" asp-action="OrderCartView" asp-controller="Order" asp-route-id="@Model.AccountId">Orders <i class="fas fa-border-all"></i></a>
+                    </li>
+                    <li>
+                        <a class="nav-link active" asp-action="ShoppingCartView" asp-controller="Order" asp-route-id="@Model.AccountId">Cart <i class="fas fa-shopping-cart"></i></a>
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    @RenderBody()
+
+
+    <div class="container-fluid py-5 dark">
+        <div class="row">
+            <div class="col-12 text-center">
+                <p class="text-white">BLUE KOI</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

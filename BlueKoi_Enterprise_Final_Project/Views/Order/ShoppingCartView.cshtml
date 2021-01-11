@@ -1,0 +1,65 @@
+﻿
+
+@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
+
+@{
+    ViewData["Title"] = "ShoppingCartView";
+    Layout = "_LayoutOrder";
+}
+
+
+
+<div class="container my-5">
+    <h5>Shopping Cart</h5>
+
+    @if (Model.ShoppingCartItems.Any())
+    {
+        <div class="row ">
+            @foreach (var item in Model.ShoppingCartItems)
+            {
+
+                <div class="col-lg-4 my-3">
+                    <div class="card">
+                        <img class="card-img-top" src="@item.ItemURL" alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">Item: @item.Id</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Price: $@item.Price</h6>
+
+                        </div>
+                        <div class="card-body">
+                            @if (item.Price > 0)
+                            {
+                                <a asp-action="CreditCardView" asp-controller="Order" asp-route-id="@Model.AccountId" asp-route-itemId="@item.ItemId" id="submit-btn"
+                                   class="btn btn-white btn-purple btn-block">
+                                    Set Card to Buy
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@item.ItemURL" class="btn btn-white btn-purple btn-block">Download</a>
+                            }
+
+                            <hr />
+                            <p>Delete the Item. There is no way to recover the Item.</p>
+                            <form asp-action="ShoppingCartView" asp-controller="Order" method="post" class="mt-2">
+                                <input type="hidden" name="id" value="@Model.AccountId" />
+                                <input type="hidden" name="itemId" value="@item.Id" />
+                                <button id="search-btn" class="ml-auto btn btn-danger btn-block" type="submit">Delete From Cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-danger">No Items in Shopping Cart!</p>
+    }
+
+</div>
+
+
+
+

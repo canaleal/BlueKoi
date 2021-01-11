@@ -35,6 +35,14 @@ h1, h2, h3 {
 
 .image {
     display: block;
+    width: 100%;
+    height: auto;
+    -webkit-transition: 300ms ease;
+    transition: 300ms ease;
+}
+
+.image-main {
+    display: block;
     width: 50%;
     height: auto;
     -webkit-transition: 300ms ease;
@@ -54,9 +62,6 @@ h1, h2, h3 {
     width: 15rem !important;
 }
 
-.form-wide {
-    width: 20rem !important;
-}
 
 @media only screen and (min-width: 1200px) {
     .bg-br {

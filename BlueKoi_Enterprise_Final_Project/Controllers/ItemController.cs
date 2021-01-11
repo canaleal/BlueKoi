@@ -1,6 +1,7 @@
 ﻿using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using BlueKoi_Enterprise_Final_Project.Models.Items;
 using BlueKoi_Enterprise_Final_Project.Models.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using ServiceReference1;
@@ -28,16 +29,26 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
         }
 
-
+        [Authorize]
         [HttpGet]
         public ActionResult StorePageView(int id, string searchData, string specialItems, bool hadError)
         {
 
+            ViewModelData viewModelData = new ViewModelData(id);
 
+            List<string> names = new List<string>
+            {
+                "leifheanzo",
+                "snatti89",
+                "unpreti",
+                "nixeu",
+                "wlop",
+                "talros",
+                "razaras"
+            };
+            viewModelData.SimpleList = names;
 
-            ViewModelData viewModelData = new ViewModelData();
-            viewModelData.Account = accountRepository.GetAnAccount(id);
-
+           
             IEnumerable<Item> items = specialItems == null ? itemRepository.GetItems() : itemRepository.GetSpecialItems();
             viewModelData.Items = items;
 
@@ -51,14 +62,14 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                     client = new APIServiceClient();
                     if (!searchData.Contains("by"))
                     {
-                        JObject json = JObject.Parse(GetDataAsyncAlpha(searchData).Result);
+                        JObject json = JObject.Parse(GetDataAsync(searchData, 0).Result);
                         data = json["results"];
                         viewModelData.ItemsSimple1 = data;
                     }
                     else
                     {
                         //Get the data from the service using API Beta
-                        JObject jsonDataVal = JObject.Parse(GetDataAsyncBeta(searchData).Result);
+                        JObject jsonDataVal = JObject.Parse(GetDataAsync(searchData, 1).Result);
                         data = jsonDataVal["rss"]["channel"]["item"];
                         viewModelData.ItemsSimple2 = data;
                     }
@@ -75,46 +86,39 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                 ViewBag.Message = "An error occured. Try again.";
             }
 
-
+           
 
             return View(viewModelData);
         }
 
 
-        public async Task<string> GetDataAsyncAlpha(string search)
+        public async Task<string> GetDataAsync(string search, int option)
         {
-            return await client.GetApiDataAlphaAsync(search);
+            return option == 0 ? await client.GetApiDataAlphaAsync(search) : await client.GetApiDataBetaAsync(search);
         }
 
 
-        public async Task<string> GetDataAsyncBeta(string search)
-        {
-            return await client.GetApiDataBetaAsync(search);
-        }
-
-
+        [Authorize]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult StorePageView(int id, string search)
         {
-            return RedirectToAction("StorePageView", "Home", new { id, searchData = search });
-
-
+            return RedirectToAction("StorePageView", "Item", new { id, searchData = search });
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult ItemView(int id, int itemId, string url)
         {
 
             try
             {
-                ViewModelData viewModelData = new ViewModelData();
-                viewModelData.Account = accountRepository.GetAnAccount(id);
-
+                ViewModelData viewModelData = new ViewModelData(id);
+               
                 if (itemId > 0)
                 {
-                    viewModelData.Item = itemRepository.GetAnItem(itemId);
-
+                    Item item = itemRepository.GetAnItem(itemId);
+                    viewModelData.Item = item;
+                    viewModelData.ItemSimple = item.ItemURL;
                 }
                 else
                 {

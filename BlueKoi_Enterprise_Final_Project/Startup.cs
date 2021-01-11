@@ -10,6 +10,7 @@ using BlueKoi_Enterprise_Final_Project.Models.ShopCart;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,20 @@ namespace BlueKoi_Enterprise_Final_Project
         {
 
 
+
+            
+            services.AddAuthentication("CookieAuth")
+                .AddCookie("CookieAuth", config =>
+                {
+                    config.Cookie.Name = "Art.Cookie";
+                    config.LoginPath = "/Account/LoginView";
+                });
+            
+
+
             services.AddDbContext<VirtualStoreDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("MyConnection")));
+
+     
             services.AddScoped<IAccountRepository, AccountOperations>();
             services.AddScoped<IOrdersCartRepository, OrdersCartOperations>();
             services.AddScoped<IItemRepository, ItemOperations>();
@@ -57,7 +71,11 @@ namespace BlueKoi_Enterprise_Final_Project
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
+           
 
             app.UseEndpoints(endpoints =>
             {
@@ -68,3 +86,4 @@ namespace BlueKoi_Enterprise_Final_Project
         }
     }
 }
+

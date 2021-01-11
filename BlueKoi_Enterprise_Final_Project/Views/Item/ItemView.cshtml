@@ -1,0 +1,66 @@
+﻿
+@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
+
+@{
+    Layout = "_LayoutOrder";
+    ViewData["Title"] = "ItemView";
+}
+
+
+<div class="container my-5">
+    <div class="row">
+        <div class="col-6">
+
+            <img class="image" src="@Model.ItemSimple" alt="art">
+            
+        </div>
+        <div class="col-lg-6">
+            <h3>KOI ART</h3>
+            @if (Model.Item != null)
+            {
+                <h5 class="text-danger">$@Model.Item.ItemPrice</h5>
+                <p>Purchase the item from the download Store!</p>
+            }
+            else
+            {
+                <h5 class="text-danger">This Item has no Price.</h5>
+                <p>The item is not for sale, but you can still download the image by clicking the download button!</p>
+                <a href="@Model.ItemSimple" download class="btn btn-success  btn-rounded btn-lg btn-block my-3">
+                    Download
+                </a>
+            }
+
+
+
+
+            @if (Model.Item != null)
+            {
+
+                @if (@Model.Item.ItemPrice > 0)
+                {
+                    <a asp-action="CreditCardView" asp-controller="Order" asp-route-id="@Model.AccountId" asp-route-itemId="@Model.Item.Id" id="submit-btn"
+                       class="btn btn-black btn-purple btn-rounded btn-lg  btn-block text-uppercase my-3">
+                        Set Card to Buy
+                    </a>
+                }
+                else
+                {
+                    <a href="@Model.ItemSimple" download class="btn btn-success  btn-rounded btn-lg btn-block my-3">
+                        Download
+                    </a>
+                }
+
+                <form asp-action="SaveItemView" asp-controller="Order" method="post" class="mt-2">
+                    <input type="hidden" asp-for="@Model.AccountId" value="@Model.AccountId" />
+                    <input type="hidden" asp-for="@Model.ItemId" value="@Model.Item.Id" />
+                    <button id="search-btn" class="btn btn-outline-dark btn-lg btn-rounded btn-rounded btn-block text-uppercase" type="submit"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
+                </form>
+
+            }
+
+
+
+        </div>
+    </div>
+   
+</div>

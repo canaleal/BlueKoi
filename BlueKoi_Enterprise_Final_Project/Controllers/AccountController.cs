@@ -2,25 +2,31 @@
 using BlueKoi_Enterprise_Final_Project.Models.Accounts;
 using BlueKoi_Enterprise_Final_Project.Models.Orders;
 using BlueKoi_Enterprise_Final_Project.Models.ShopCart;
+using BlueKoi_Enterprise_Final_Project.Models.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace BlueKoi_Enterprise_Final_Project.Controllers
 {
     public class AccountController : Controller
     {
-       
-       
+
+  
         private readonly IAccountRepository accountRepository;
         private readonly IOrdersCartRepository ordersCartRepository;
         private readonly IShoppingCartRepository shoppingCartRepository;
 
 
-        public AccountController(IAccountRepository accountRepository, IOrdersCartRepository ordersCartRepository, IShoppingCartRepository shoppingCartRepository)
+        public AccountController( IAccountRepository accountRepository, IOrdersCartRepository ordersCartRepository, IShoppingCartRepository shoppingCartRepository)
         {
+
             this.accountRepository = accountRepository;
             this.ordersCartRepository = ordersCartRepository;
             this.shoppingCartRepository = shoppingCartRepository;
@@ -42,7 +48,20 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
 
                 if (account != null)
                 {
-                    return RedirectToAction("StorePageView", "Home", new { id = account.Id });
+
+                    var artClaim = new List<Claim>()
+                    {
+                        new Claim(ClaimTypes.Name, account.UserName),
+                        new Claim(ClaimTypes.Email, account.UserEmail),
+                    };
+
+                    var artIdentity = new ClaimsIdentity(artClaim, "Art Identity");
+                    var userPrinciple = new ClaimsPrincipal(new[] { artIdentity });
+
+                    HttpContext.SignInAsync(userPrinciple);
+            
+
+                    return RedirectToAction("StorePageView", "Item", new { id = account.Id });
                 }
 
                 //Add error
@@ -75,7 +94,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
                     ShoppingCart shoppingCart = new ShoppingCart(newAccount.Id);
                     shoppingCartRepository.Add(shoppingCart);
 
-                    return RedirectToAction("StorePageView", "Home", new { id = newAccount.Id });
+                    return RedirectToAction("StorePageView", "Item", new { id = newAccount.Id });
                 }
 
 
@@ -86,23 +105,24 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
             return View();
         }
 
-
+        [Authorize]
         [HttpGet]
         public ActionResult AccountView(int id)
         {
             try
             {
                 Account account = accountRepository.GetAnAccount(id);
-                return View();
+                return View(account);
             }
             catch
             {
 
-                return RedirectToAction("StorePageView", "Home", new { id, errorMessage = true });
+                return RedirectToAction("StorePageView", "Item", new { id, errorMessage = true });
             }
 
         }
 
+        [Authorize]
         [HttpGet]
         public ActionResult DeleteView(int id)
         {
@@ -110,6 +130,7 @@ namespace BlueKoi_Enterprise_Final_Project.Controllers
         }
 
 
+        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteView(Account deleteAccount)

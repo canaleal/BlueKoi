@@ -46,12 +46,32 @@ namespace BlueKoi_Enterprise_Final_Project.Models.ShopCart
 
         public void DeleteShoppingCartItems(int id)
         {
-            var item = context.ShoppingCartItems.FirstOrDefault(a => a.Id == id);
-            if (item != null)
+   
+            try
             {
                 context.ShoppingCartItems.Remove(context.ShoppingCartItems.FirstOrDefault(a => a.Id == id));
                 context.SaveChanges();
             }
+            catch
+            {
+
+            }
+
+        }
+
+        public void DeleteItem(int id)
+        {
+
+            try
+            {
+                context.ShoppingCartItems.Remove(context.ShoppingCartItems.FirstOrDefault(a => a.Id == id));
+                context.SaveChanges();
+            }
+            catch
+            {
+
+            }
+           
 
         }
     }

@@ -13,7 +13,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.ShopCart
         [Key]
         public int Id { get; set; }
 
-        [Column("AccountID")]
+        [Column("AccountId")]
         public int AccountId { get; set; }
 
         public ShoppingCart(int accountId)

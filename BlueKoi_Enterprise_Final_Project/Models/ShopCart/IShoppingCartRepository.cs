@@ -16,5 +16,7 @@ namespace BlueKoi_Enterprise_Final_Project.Models.ShopCart
         IEnumerable<ShoppingCartItem> GetSavedItems(int shoppingCartId);
 
         void AddShoppingCartItem(ShoppingCartItem item);
+
+        void DeleteItem(int itemId);
     }
 }

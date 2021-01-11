@@ -21,6 +21,8 @@ namespace BlueKoi_Enterprise_Final_Project.Models.ViewModels
 
         public IEnumerable<Item> Items { get; set; }
 
+        public List<string> SimpleList { get; set; } 
+
         public JToken ItemsSimple1 { get; set; }
         public JToken ItemsSimple2 { get; set; }
 
@@ -39,6 +41,11 @@ namespace BlueKoi_Enterprise_Final_Project.Models.ViewModels
         public IEnumerable<Order> Orders { get; set; }
 
         public IEnumerable<ShoppingCartItem> ShoppingCartItems { get; set; }
+
+        public ViewModelData(int accountId)
+        {
+            this.AccountId = accountId;
+        }
 
     }
 }

@@ -13,6 +13,9 @@ namespace BlueKoi_Enterprise_Final_Project.Models.ShopCart
         [Key]
         public int Id { get; set; }
 
+        [Column("ItemId")]
+        public int ItemId { get; set; }
+
         [Column("ShoppingCartId")]
         public int ShoppingCartId { get; set; }
 

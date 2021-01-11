@@ -1,0 +1,106 @@
+﻿
+@model BlueKoi_Enterprise_Final_Project.Models.ViewModels.ViewModelData
+
+@{
+    Layout = "_LayoutOrder";
+    ViewData["Title"] = "StorePage";
+}
+
+
+
+<div class="container-fluid dark py-4">
+    <div class="container">
+
+
+        <div class="row">
+            <div class="col-12">
+                <form asp-action="StorePageView" asp-controller="Item" method="post" class="my-2" accept-charset="UTF-8" >
+                    <input type="hidden" name="id" value="@Model.AccountId" />
+                    <div class="input-group">
+                        <input type="text" name="search" id="search"  placeholder="Search" class="form-control"  autocomplete="off">
+                        <span class="input-group-btn">
+                            <input type="submit" class="btn btn-white btn-purple" data-disable-with="Search">
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                @foreach (var name in Model.SimpleList)
+                {
+                    <a class="btn btn-white btn-purple mx-1 my-1" asp-action="StorePageView" asp-route-id="@Model.AccountId" asp-route-searchData="by%@name">@name</a>
+                }
+
+                <a class="btn btn-white btn-purple mx-1 my-1" asp-action="StorePageView" asp-route-id="@Model.AccountId" asp-route-specialItems="special%KOIDB">Special Items</a>
+            </div>          
+        </div>
+    </div>
+</div>
+
+<main class="my-5">
+
+
+    @if (ViewBag.msg != null)
+    {
+        <div class="container py-2">
+            <p class="text-danger py-2">@ViewBag.msg</p>
+        </div>
+
+    }
+
+    @if (Model.ItemsSimple1 != null)
+    {
+        <div class="container py-2">
+            <div class="brgrid">
+                @foreach (var image in Model.ItemsSimple1)
+                {
+
+                    <a asp-action="ItemView" asp-route-id="@Model.AccountId" asp-route-url="@image["urls"]["regular"]">
+                        <div class="card-al" style="background-image:url(@image["urls"]["regular"])"> <img class="mx-2" height="30" src="~/images/Pinterest.png" alt=""></div>
+                    </a>
+
+                }
+            </div>
+        </div>
+    }
+
+
+    @if (Model.ItemsSimple2 != null)
+    {
+        <div class="container py-2">
+            <div class="brgrid">
+                @foreach (var image in Model.ItemsSimple2)
+                {
+
+                    <a asp-action="ItemView" asp-route-id="@Model.AccountId" asp-route-url="@image["media:content"]["@url"]">
+                        <div class="card-al " style="background-image:url(@image["media:content"]["@url"])"> <img class="mx-2" height="30" src="~/images/DeviantArt.png" alt=""></div>
+                    </a>
+
+                }
+            </div>
+        </div>
+    }
+
+
+    @if (Model.Items != null)
+    {
+        <div class="container py-2">
+            <h5>Set : Developer Favorites</h5>
+            <div class="brgrid">
+                @foreach (var item in Model.Items)
+                {
+                    <a asp-action="ItemView" asp-route-id="@Model.AccountId" asp-route-itemId="@item.Id" class="@item.Size">
+                        <div class="card-al @item.Size" style="background-image:url(@item.ItemURL)"> <img class="mx-2" height="30" src="~/images/BlueKoi.png" alt=""></div>
+
+                    </a>
+
+                }
+            </div>
+        </div>
+    }
+
+
+</main>
+
